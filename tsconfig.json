@@ -4,5 +4,11 @@
     "strict": true,
     "jsx": "react-native",
     "ignoreDeprecations": "6.0"
-  }
+  },
+  "include": [
+    "**/*.ts",
+    "**/*.tsx",
+    ".expo/types/**/*.ts",
+    "expo-env.d.ts"
+  ]
 }

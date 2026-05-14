@@ -134,7 +134,7 @@ The application includes:
 # Team Members
 
 - Anand Yadav
-- Team Member 2
+- Navteg Singh Bains
 
 ---
 

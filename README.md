@@ -1,50 +1,143 @@
-# Welcome to your Expo app 👋
+# Daily Fit 🏋️
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Daily Fit is a mobile fitness and wellness tracking application developed using React Native and Expo for the CSE3MAD Mobile Application Development assessment.
 
-## Get started
+The application helps users:
+- Track workouts
+- Monitor fitness activities
+- View location-based activity tracking
+- Receive workout reminders
+- Store fitness data locally and in the cloud
 
-1. Install dependencies
+---
 
-   ```bash
-   npm install
-   ```
+# Features
 
-2. Start the app
+## Authentication
+- User Registration
+- User Login
+- Secure Firebase Authentication
 
-   ```bash
-   npx expo start
-   ```
+## Database
+- Firebase Firestore cloud storage
+- SQLite local offline storage
 
-In the output, you'll find options to open the app in a
+## Mobile Features
+- GPS and Maps integration
+- Accelerometer and Gyroscope support
+- Battery monitoring
+- Notifications and reminders
+- Background task processing
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+## Additional Features
+- AdMob integration
+- Dark/Light theme
+- Responsive UI design
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+---
 
-## Get a fresh project
+# Technologies Used
 
-When you're ready, run:
+- React Native
+- Expo
+- TypeScript
+- Firebase
+- Firestore
+- SQLite
+- Expo Notifications
+- Expo Location
+- Expo Sensors
+
+---
+
+# Project Structure
 
 ```bash
-npm run reset-project
+src/
+ ├── assets/
+ ├── components/
+ ├── database/
+ ├── firebase/
+ ├── hooks/
+ ├── navigation/
+ ├── screens/
+ ├── services/
+ └── utils/
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+---
 
-## Learn more
+# Installation
 
-To learn more about developing your project with Expo, look at the following resources:
+## 1. Clone Repository
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+```bash
+git clone YOUR_GITHUB_REPOSITORY_LINK
+```
 
-## Join the community
+---
 
-Join our community of developers creating universal apps.
+## 2. Install Dependencies
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+```bash
+npm install
+```
+
+---
+
+## 3. Start Development Server
+
+```bash
+npx expo start
+```
+
+---
+
+# Firebase Setup
+
+Create a Firebase project and enable:
+
+- Firebase Authentication
+- Firestore Database
+
+Add Firebase configuration inside:
+
+```bash
+src/firebase/firebaseConfig.ts
+```
+
+---
+
+# Sprint Structure
+
+## Sprint 1
+Foundation and Database Systems
+
+## Sprint 2
+Mobile Features and Device Integration
+
+## Sprint 3
+Testing, Deployment and Finalization
+
+---
+
+# Testing
+
+The application includes:
+- Unit Testing
+- Integration Testing
+- End-to-End Testing
+- Firebase Test Lab testing
+
+---
+
+# Team Members
+
+- Anand Yadav
+- Team Member 2
+
+---
+
+# License
+
+This project is developed for educational purposes as part of the CSE3MAD assessment.

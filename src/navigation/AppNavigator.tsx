@@ -1,12 +1,14 @@
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
+import BatteryScreen from "../screens/BatteryScreen";
 import DashboardScreen from "../screens/DashboardScreen";
 import GoalsScreen from "../screens/GoalsScreen";
 import LocationScreen from "../screens/LocationScreen";
 import LoginScreen from "../screens/LoginScreen";
 import ReminderScreen from "../screens/ReminderScreen";
 import SignupScreen from "../screens/SignupScreen";
+
 const Stack = createNativeStackNavigator();
 
 export default function AppNavigator() {
@@ -20,7 +22,7 @@ export default function AppNavigator() {
 <Stack.Screen name="Goals" component={GoalsScreen} />
 <Stack.Screen name="Location" component={LocationScreen} />
 <Stack.Screen name="Reminder" component={ReminderScreen} />
-
+<Stack.Screen name="Battery" component={BatteryScreen} />
         <Stack.Screen
           name="Signup"
           component={SignupScreen}

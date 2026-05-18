@@ -2,7 +2,7 @@ import { useNavigation } from "@react-navigation/native";
 import { Pedometer } from "expo-sensors";
 import { useEffect, useState } from "react";
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-
+import { createActivityTable, insertActivity } from "../database/database";
 export default function DashboardScreen() {
   const navigation = useNavigation<any>();
   const [steps, setSteps] = useState(0);
@@ -17,6 +17,7 @@ const [startTime, setStartTime] = useState<Date | null>(null);
 const [endTime, setEndTime] = useState<Date | null>(null);
 
   useEffect(() => {
+    createActivityTable();
     Pedometer.isAvailableAsync().then((result) => {
       setIsAvailable(result);
     });
@@ -38,11 +39,22 @@ const startWalk = () => {
   setEndTime(null);
 };
 
-const finishWalk = () => {
-  setWalking(false);
-  setEndTime(new Date());
-};
+const finishWalk = async () => {
+  const finish = new Date();
 
+  setWalking(false);
+  setEndTime(finish);
+
+  if (startTime) {
+    await insertActivity(
+      new Date().toLocaleDateString(),
+      startTime.toLocaleTimeString(),
+      finish.toLocaleTimeString(),
+      sessionSteps,
+      sessionCalories
+    );
+  }
+};
 const sessionCalories = Math.round(sessionSteps * 0.04);
 
   return (

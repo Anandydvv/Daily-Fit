@@ -47,12 +47,16 @@ const finishWalk = async () => {
 
   if (startTime) {
     await insertActivity(
-      new Date().toLocaleDateString(),
-      startTime.toLocaleTimeString(),
-      finish.toLocaleTimeString(),
-      sessionSteps,
-      sessionCalories
-    );
+  new Date().toLocaleDateString(),
+  startTime.toLocaleTimeString(),
+  finish.toLocaleTimeString(),
+  sessionSteps,
+  sessionCalories,
+  0,
+  0,
+  0,
+  0
+);
   }
 };
 const sessionCalories = Math.round(sessionSteps * 0.04);

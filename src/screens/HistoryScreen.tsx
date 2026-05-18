@@ -1,48 +1,45 @@
+import { useEffect, useState } from "react";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
+import { getActivities } from "../database/database";
 
-const sampleHistory = [
-  {
-    date: "18 May 2026",
-    start: "9:00 AM",
-    finish: "9:45 AM",
-    steps: 4200,
-    calories: 168,
-  },
-  {
-    date: "17 May 2026",
-    start: "6:30 PM",
-    finish: "7:10 PM",
-    steps: 3500,
-    calories: 140,
-  },
-];
+type Activity = {
+  id: number;
+  date: string;
+  startTime: string;
+  finishTime: string;
+  steps: number;
+  calories: number;
+};
 
 export default function HistoryScreen() {
+  const [activities, setActivities] = useState<Activity[]>([]);
+
+  useEffect(() => {
+    const loadActivities = async () => {
+      const data = await getActivities();
+      setActivities(data as Activity[]);
+    };
+
+    loadActivities();
+  }, []);
+
   return (
     <ScrollView style={styles.container}>
       <Text style={styles.title}>Activity History</Text>
 
-      {sampleHistory.map((item, index) => (
-        <View key={index} style={styles.card}>
-          <Text style={styles.date}>{item.date}</Text>
-
-          <Text style={styles.text}>
-            Start: {item.start}
-          </Text>
-
-          <Text style={styles.text}>
-            Finish: {item.finish}
-          </Text>
-
-          <Text style={styles.text}>
-            Steps: {item.steps}
-          </Text>
-
-          <Text style={styles.text}>
-            Calories: {item.calories} kcal
-          </Text>
-        </View>
-      ))}
+      {activities.length === 0 ? (
+        <Text style={styles.emptyText}>No activity records yet.</Text>
+      ) : (
+        activities.map((item) => (
+          <View key={item.id} style={styles.card}>
+            <Text style={styles.date}>{item.date}</Text>
+            <Text style={styles.text}>Start: {item.startTime}</Text>
+            <Text style={styles.text}>Finish: {item.finishTime}</Text>
+            <Text style={styles.text}>Steps: {item.steps}</Text>
+            <Text style={styles.text}>Calories: {item.calories} kcal</Text>
+          </View>
+        ))
+      )}
     </ScrollView>
   );
 }
@@ -53,30 +50,32 @@ const styles = StyleSheet.create({
     backgroundColor: "#F5F7FA",
     padding: 20,
   },
-
   title: {
     fontSize: 32,
     fontWeight: "bold",
     marginVertical: 20,
     textAlign: "center",
   },
-
   card: {
     backgroundColor: "#fff",
     padding: 20,
     borderRadius: 16,
     marginBottom: 16,
   },
-
   date: {
     fontSize: 20,
     fontWeight: "bold",
     marginBottom: 10,
     color: "#1B5E20",
   },
-
   text: {
     fontSize: 16,
     marginBottom: 5,
+  },
+  emptyText: {
+    textAlign: "center",
+    fontSize: 16,
+    color: "#777",
+    marginTop: 30,
   },
 });

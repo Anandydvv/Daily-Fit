@@ -6,9 +6,9 @@ import GoalsScreen from "../screens/GoalsScreen";
 import HistoryScreen from "../screens/HistoryScreen";
 import LocationScreen from "../screens/LocationScreen";
 import LoginScreen from "../screens/LoginScreen";
+import ProgressScreen from "../screens/ProgressScreen";
 import ReminderScreen from "../screens/ReminderScreen";
 import SignupScreen from "../screens/SignupScreen";
-
 const Stack = createNativeStackNavigator();
 
 export default function AppNavigator() {
@@ -22,6 +22,7 @@ export default function AppNavigator() {
       <Stack.Screen name="Reminder" component={ReminderScreen} />
       <Stack.Screen name="Battery" component={BatteryScreen} />
       <Stack.Screen name="History" component={HistoryScreen} />
+      <Stack.Screen name="Progress" component={ProgressScreen} />
     </Stack.Navigator>
   );
 }

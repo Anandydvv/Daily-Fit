@@ -123,6 +123,14 @@ const sessionCalories = Math.round(sessionSteps * 0.04);
       <TouchableOpacity style={styles.navButton} onPress={() => navigation.navigate("Battery")}>
         <Text style={styles.navButtonText}>Battery Status</Text>
       </TouchableOpacity>
+      <TouchableOpacity
+  style={styles.navButton}
+  onPress={() => navigation.navigate("Progress")}
+>
+  <Text style={styles.navButtonText}>
+    Weekly Progress
+  </Text>
+</TouchableOpacity>
     </ScrollView>
   );
 }

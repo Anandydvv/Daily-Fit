@@ -11,6 +11,10 @@ export default function DashboardScreen() {
   const calories = Math.round(steps * 0.04);
   const goal = 10000;
   const progress = Math.min(Math.round((steps / goal) * 100), 100);
+const [walking, setWalking] = useState(false);
+const [sessionSteps, setSessionSteps] = useState(0);
+const [startTime, setStartTime] = useState<Date | null>(null);
+const [endTime, setEndTime] = useState<Date | null>(null);
 
   useEffect(() => {
     Pedometer.isAvailableAsync().then((result) => {
@@ -18,11 +22,28 @@ export default function DashboardScreen() {
     });
 
     const subscription = Pedometer.watchStepCount((result) => {
-      setSteps(result.steps);
+    setSteps(result.steps);
+
+if (walking) {
+  setSessionSteps(result.steps);
+}
     });
 
     return () => subscription.remove();
   }, []);
+const startWalk = () => {
+  setWalking(true);
+  setSessionSteps(0);
+  setStartTime(new Date());
+  setEndTime(null);
+};
+
+const finishWalk = () => {
+  setWalking(false);
+  setEndTime(new Date());
+};
+
+const sessionCalories = Math.round(sessionSteps * 0.04);
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -43,7 +64,43 @@ export default function DashboardScreen() {
           <Text style={styles.cardValue}>{calories}</Text>
           <Text style={styles.cardText}>kcal</Text>
         </View>
+<View style={styles.mainCard}>
+  <Text style={styles.cardLabel}>Walking Session</Text>
 
+  <Text style={styles.cardValue}>
+    {walking ? "ACTIVE" : "NOT ACTIVE"}
+  </Text>
+
+  <Text style={styles.cardText}>
+    Session Steps: {sessionSteps}
+  </Text>
+
+  <Text style={styles.cardText}>
+    Calories Burned: {sessionCalories} kcal
+  </Text>
+
+  {startTime && (
+    <Text style={styles.cardText}>
+      Started: {startTime.toLocaleTimeString()}
+    </Text>
+  )}
+
+  {endTime && (
+    <Text style={styles.cardText}>
+      Finished: {endTime.toLocaleTimeString()}
+    </Text>
+  )}
+
+  {!walking ? (
+    <TouchableOpacity style={styles.navButton} onPress={startWalk}>
+      <Text style={styles.navButtonText}>Start Walk</Text>
+    </TouchableOpacity>
+  ) : (
+    <TouchableOpacity style={styles.navButton} onPress={finishWalk}>
+      <Text style={styles.navButtonText}>Finish Walk</Text>
+    </TouchableOpacity>
+  )}
+</View>
         <View style={styles.smallCard}>
           <Text style={styles.cardLabel}>Goal</Text>
           <Text style={styles.cardValue}>{progress}%</Text>

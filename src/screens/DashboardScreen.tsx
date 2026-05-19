@@ -1,223 +1,400 @@
 import { useNavigation } from "@react-navigation/native";
 import { Pedometer } from "expo-sensors";
 import { useEffect, useState } from "react";
-import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
+
 import { createActivityTable, insertActivity } from "../database/database";
+
 export default function DashboardScreen() {
   const navigation = useNavigation<any>();
+
   const [steps, setSteps] = useState(0);
   const [isAvailable, setIsAvailable] = useState(false);
 
+  const [walking, setWalking] = useState(false);
+  const [sessionSteps, setSessionSteps] = useState(0);
+
+  const [startTime, setStartTime] = useState<Date | null>(null);
+
+  const [endTime, setEndTime] = useState<Date | null>(null);
+
   const calories = Math.round(steps * 0.04);
+
+  const sessionCalories = Math.round(sessionSteps * 0.04);
+
   const goal = 10000;
+
   const progress = Math.min(Math.round((steps / goal) * 100), 100);
-const [walking, setWalking] = useState(false);
-const [sessionSteps, setSessionSteps] = useState(0);
-const [startTime, setStartTime] = useState<Date | null>(null);
-const [endTime, setEndTime] = useState<Date | null>(null);
 
   useEffect(() => {
     createActivityTable();
+
     Pedometer.isAvailableAsync().then((result) => {
       setIsAvailable(result);
     });
 
     const subscription = Pedometer.watchStepCount((result) => {
-    setSteps(result.steps);
+      setSteps(result.steps);
 
-if (walking) {
-  setSessionSteps(result.steps);
-}
+      if (walking) {
+        setSessionSteps(result.steps);
+      }
     });
 
     return () => subscription.remove();
-  }, []);
-const startWalk = () => {
-  setWalking(true);
-  setSessionSteps(0);
-  setStartTime(new Date());
-  setEndTime(null);
-};
+  }, [walking]);
 
-const finishWalk = async () => {
-  const finish = new Date();
+  const startWalk = () => {
+    setWalking(true);
+    setSessionSteps(0);
+    setStartTime(new Date());
+    setEndTime(null);
+  };
 
-  setWalking(false);
-  setEndTime(finish);
+  const finishWalk = async () => {
+    const finish = new Date();
 
-  if (startTime) {
-    await insertActivity(
-  new Date().toLocaleDateString(),
-  startTime.toLocaleTimeString(),
-  finish.toLocaleTimeString(),
-  sessionSteps,
-  sessionCalories,
-  0,
-  0,
-  0,
-  0
-);
-  }
-};
-const sessionCalories = Math.round(sessionSteps * 0.04);
+    setWalking(false);
+    setEndTime(finish);
+
+    if (startTime) {
+      await insertActivity(
+        new Date().toLocaleDateString(),
+        startTime.toLocaleTimeString(),
+        finish.toLocaleTimeString(),
+        sessionSteps,
+        sessionCalories,
+        0,
+        0,
+        0,
+        0,
+      );
+    }
+  };
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.title}>DailyFit</Text>
-      <Text style={styles.subtitle}>Your health dashboard</Text>
+      {/* Header */}
+      <View style={styles.header}>
+        <Text style={styles.greeting}>Good Morning 👋</Text>
 
-      <View style={styles.mainCard}>
-        <Text style={styles.cardLabel}>Steps Today</Text>
-        <Text style={styles.steps}>{steps}</Text>
-        <Text style={styles.cardText}>
-          Pedometer: {isAvailable ? "Available" : "Not Available"}
+        <Text style={styles.headerTitle}>DailyFit Dashboard</Text>
+      </View>
+
+      {/* Hero Card */}
+      <View style={styles.heroCard}>
+        <Text style={styles.heroLabel}>Today's Activity</Text>
+
+        <Text style={styles.heroSteps}>{steps}</Text>
+
+        <Text style={styles.heroSub}>
+          {progress}% of {goal} step goal
         </Text>
-      </View>
 
-      <View style={styles.row}>
-        <View style={styles.smallCard}>
-          <Text style={styles.cardLabel}>Calories</Text>
-          <Text style={styles.cardValue}>{calories}</Text>
-          <Text style={styles.cardText}>kcal</Text>
-        </View>
-<View style={styles.mainCard}>
-  <Text style={styles.cardLabel}>Walking Session</Text>
+        <View style={styles.statsRow}>
+          <View style={styles.statBox}>
+            <Text style={styles.statValue}>{calories}</Text>
 
-  <Text style={styles.cardValue}>
-    {walking ? "ACTIVE" : "NOT ACTIVE"}
-  </Text>
+            <Text style={styles.statLabel}>Calories</Text>
+          </View>
 
-  <Text style={styles.cardText}>
-    Session Steps: {sessionSteps}
-  </Text>
+          <View style={styles.statBox}>
+            <Text style={styles.statValue}>{isAvailable ? "ON" : "OFF"}</Text>
 
-  <Text style={styles.cardText}>
-    Calories Burned: {sessionCalories} kcal
-  </Text>
-
-  {startTime && (
-    <Text style={styles.cardText}>
-      Started: {startTime.toLocaleTimeString()}
-    </Text>
-  )}
-
-  {endTime && (
-    <Text style={styles.cardText}>
-      Finished: {endTime.toLocaleTimeString()}
-    </Text>
-  )}
-
-  {!walking ? (
-    <TouchableOpacity style={styles.navButton} onPress={startWalk}>
-      <Text style={styles.navButtonText}>Start Walk</Text>
-    </TouchableOpacity>
-  ) : (
-    <TouchableOpacity style={styles.navButton} onPress={finishWalk}>
-      <Text style={styles.navButtonText}>Finish Walk</Text>
-    </TouchableOpacity>
-  )}
-</View>
-        <View style={styles.smallCard}>
-          <Text style={styles.cardLabel}>Goal</Text>
-          <Text style={styles.cardValue}>{progress}%</Text>
-          <Text style={styles.cardText}>{goal} steps</Text>
+            <Text style={styles.statLabel}>Pedometer</Text>
+          </View>
         </View>
       </View>
 
-      <TouchableOpacity style={styles.navButton} onPress={() => navigation.navigate("Goals")}>
-        <Text style={styles.navButtonText}>Goals & Calories</Text>
-      </TouchableOpacity>
+      {/* Session Card */}
+      <View style={styles.sessionCard}>
+        <View style={styles.sessionHeader}>
+          <Text style={styles.sessionTitle}>Walking Session</Text>
 
-      <TouchableOpacity style={styles.navButton} onPress={() => navigation.navigate("Location")}>
-        <Text style={styles.navButtonText}>GPS Tracking</Text>
-      </TouchableOpacity>
+          <View
+            style={[
+              styles.statusDot,
+              {
+                backgroundColor: walking ? "#00E676" : "#FF5252",
+              },
+            ]}
+          />
+        </View>
 
-      <TouchableOpacity style={styles.navButton} onPress={() => navigation.navigate("Reminder")}>
-        <Text style={styles.navButtonText}>Workout Reminder</Text>
-      </TouchableOpacity>
+        <Text style={styles.sessionStatus}>
+          {walking ? "ACTIVE" : "NOT ACTIVE"}
+        </Text>
 
-      <TouchableOpacity style={styles.navButton} onPress={() => navigation.navigate("Battery")}>
-        <Text style={styles.navButtonText}>Battery Status</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-  style={styles.navButton}
-  onPress={() => navigation.navigate("Progress")}
->
-  <Text style={styles.navButtonText}>
-    Weekly Progress
-  </Text>
-</TouchableOpacity>
+        <View style={styles.sessionStats}>
+          <View>
+            <Text style={styles.sessionNumber}>{sessionSteps}</Text>
+
+            <Text style={styles.sessionText}>Session Steps</Text>
+          </View>
+
+          <View>
+            <Text style={styles.sessionNumber}>{sessionCalories}</Text>
+
+            <Text style={styles.sessionText}>Calories</Text>
+          </View>
+        </View>
+
+        {startTime && (
+          <Text style={styles.timeText}>
+            Started: {startTime.toLocaleTimeString()}
+          </Text>
+        )}
+
+        {endTime && (
+          <Text style={styles.timeText}>
+            Finished: {endTime.toLocaleTimeString()}
+          </Text>
+        )}
+
+        {!walking ? (
+          <TouchableOpacity style={styles.walkButton} onPress={startWalk}>
+            <Text style={styles.walkButtonText}>Start Walk</Text>
+          </TouchableOpacity>
+        ) : (
+          <TouchableOpacity
+            style={[styles.walkButton, { backgroundColor: "#D32F2F" }]}
+            onPress={finishWalk}
+          >
+            <Text style={styles.walkButtonText}>Finish Walk</Text>
+          </TouchableOpacity>
+        )}
+      </View>
+
+      {/* Quick Actions */}
+      <Text style={styles.sectionTitle}>Quick Actions</Text>
+
+      <View style={styles.grid}>
+        <TouchableOpacity
+          style={styles.actionCard}
+          onPress={() => navigation.navigate("Goals")}
+        >
+          <Text style={styles.actionEmoji}>🎯</Text>
+
+          <Text style={styles.actionText}>Goals</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.actionCard}
+          onPress={() => navigation.navigate("Location")}
+        >
+          <Text style={styles.actionEmoji}>📍</Text>
+
+          <Text style={styles.actionText}>GPS</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.actionCard}
+          onPress={() => navigation.navigate("Reminder")}
+        >
+          <Text style={styles.actionEmoji}>⏰</Text>
+
+          <Text style={styles.actionText}>Reminder</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.actionCard}
+          onPress={() => navigation.navigate("Battery")}
+        >
+          <Text style={styles.actionEmoji}>🔋</Text>
+
+          <Text style={styles.actionText}>Battery</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.actionCard}
+          onPress={() => navigation.navigate("Progress")}
+        >
+          <Text style={styles.actionEmoji}>📈</Text>
+
+          <Text style={styles.actionText}>Progress</Text>
+        </TouchableOpacity>
+      </View>
     </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    padding: 20,
-    backgroundColor: "#F5F7FA",
     flexGrow: 1,
+    backgroundColor: "#0F172A",
+    padding: 20,
+    paddingTop: 50,
   },
-  title: {
-    fontSize: 34,
-    fontWeight: "bold",
-    marginTop: 20,
-    textAlign: "center",
-  },
-  subtitle: {
-    fontSize: 16,
-    color: "#666",
-    textAlign: "center",
+
+  header: {
     marginBottom: 25,
   },
-  mainCard: {
-    backgroundColor: "#FFFFFF",
-    padding: 25,
-    borderRadius: 20,
-    alignItems: "center",
-    marginBottom: 20,
-  },
-  cardLabel: {
+
+  greeting: {
+    color: "#94A3B8",
     fontSize: 16,
-    color: "#666",
   },
-  steps: {
-    fontSize: 56,
-    fontWeight: "bold",
-    color: "#2E7D32",
-    marginVertical: 10,
-  },
-  cardText: {
-    fontSize: 14,
-    color: "#777",
-  },
-  row: {
-    flexDirection: "row",
-    gap: 15,
-    marginBottom: 20,
-  },
-  smallCard: {
-    flex: 1,
-    backgroundColor: "#FFFFFF",
-    padding: 20,
-    borderRadius: 18,
-    alignItems: "center",
-  },
-  cardValue: {
+
+  headerTitle: {
+    color: "#FFFFFF",
     fontSize: 30,
     fontWeight: "bold",
-    color: "#1976D2",
+    marginTop: 5,
+  },
+
+  heroCard: {
+    backgroundColor: "#1E293B",
+    borderRadius: 28,
+    padding: 28,
+    marginBottom: 25,
+  },
+
+  heroLabel: {
+    color: "#94A3B8",
+    fontSize: 16,
+  },
+
+  heroSteps: {
+    color: "#FFFFFF",
+    fontSize: 58,
+    fontWeight: "bold",
+    marginTop: 12,
+  },
+
+  heroSub: {
+    color: "#CBD5E1",
+    fontSize: 15,
     marginTop: 8,
   },
-  navButton: {
-    backgroundColor: "#1B5E20",
+
+  statsRow: {
+    flexDirection: "row",
+    marginTop: 25,
+    gap: 15,
+  },
+
+  statBox: {
+    flex: 1,
+    backgroundColor: "#334155",
+    borderRadius: 18,
+    padding: 18,
+    alignItems: "center",
+  },
+
+  statValue: {
+    color: "#00E676",
+    fontSize: 24,
+    fontWeight: "bold",
+  },
+
+  statLabel: {
+    color: "#CBD5E1",
+    marginTop: 5,
+  },
+
+  sessionCard: {
+    backgroundColor: "#1E293B",
+    borderRadius: 28,
+    padding: 25,
+    marginBottom: 30,
+  },
+
+  sessionHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+
+  sessionTitle: {
+    color: "#FFFFFF",
+    fontSize: 22,
+    fontWeight: "bold",
+  },
+
+  statusDot: {
+    width: 14,
+    height: 14,
+    borderRadius: 50,
+  },
+
+  sessionStatus: {
+    color: "#94A3B8",
+    marginTop: 8,
+    marginBottom: 25,
+  },
+
+  sessionStats: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginBottom: 20,
+  },
+
+  sessionNumber: {
+    color: "#FFFFFF",
+    fontSize: 30,
+    fontWeight: "bold",
+  },
+
+  sessionText: {
+    color: "#94A3B8",
+    marginTop: 5,
+  },
+
+  timeText: {
+    color: "#CBD5E1",
+    marginBottom: 8,
+  },
+
+  walkButton: {
+    backgroundColor: "#00C853",
     padding: 16,
-    borderRadius: 14,
+    borderRadius: 18,
+    marginTop: 20,
+  },
+
+  walkButtonText: {
+    color: "#FFFFFF",
+    textAlign: "center",
+    fontWeight: "bold",
+    fontSize: 16,
+  },
+
+  sectionTitle: {
+    color: "#FFFFFF",
+    fontSize: 22,
+    fontWeight: "bold",
+    marginBottom: 20,
+  },
+
+  grid: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "space-between",
+    gap: 15,
+  },
+
+  actionCard: {
+    width: "47%",
+    backgroundColor: "#1E293B",
+    borderRadius: 22,
+    padding: 25,
+    alignItems: "center",
+  },
+
+  actionEmoji: {
+    fontSize: 34,
     marginBottom: 12,
   },
-  navButtonText: {
+
+  actionText: {
     color: "#FFFFFF",
-    fontSize: 16,
     fontWeight: "bold",
-    textAlign: "center",
+    fontSize: 16,
   },
 });

@@ -5,10 +5,11 @@ import DashboardScreen from "../screens/DashboardScreen";
 import GoalsScreen from "../screens/GoalsScreen";
 import HistoryScreen from "../screens/HistoryScreen";
 import LocationScreen from "../screens/LocationScreen";
-import LoginScreen from "../screens/LoginScreen";
+import LoginScreen from "../screens/loginscreen";
 import ProgressScreen from "../screens/ProgressScreen";
 import ReminderScreen from "../screens/ReminderScreen";
 import SignupScreen from "../screens/SignupScreen";
+
 const Stack = createNativeStackNavigator();
 
 export default function AppNavigator() {

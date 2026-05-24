@@ -1,25 +1,21 @@
-import { StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
 
 export default function SignupScreen() {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Create Account</Text>
 
-      <TextInput
-        placeholder="Full Name"
-        style={styles.input}
-      />
+      <TextInput placeholder="Full Name" style={styles.input} />
 
-      <TextInput
-        placeholder="Email"
-        style={styles.input}
-      />
+      <TextInput placeholder="Email" style={styles.input} />
 
-      <TextInput
-        placeholder="Password"
-        secureTextEntry
-        style={styles.input}
-      />
+      <TextInput placeholder="Password" secureTextEntry style={styles.input} />
 
       <TouchableOpacity style={styles.button}>
         <Text style={styles.buttonText}>Sign Up</Text>

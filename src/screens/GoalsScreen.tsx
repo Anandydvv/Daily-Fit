@@ -1,9 +1,20 @@
+import { Pedometer } from "expo-sensors";
+import { useEffect, useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 
 export default function GoalsScreen() {
-  const caloriesBurned = 320;
+  const [steps, setSteps] = useState(0);
+
   const dailyGoal = 10000;
-  const currentSteps = 4200;
+  const caloriesBurned = Math.round(steps * 0.04);
+
+  useEffect(() => {
+    const subscription = Pedometer.watchStepCount((result) => {
+      setSteps(result.steps);
+    });
+
+    return () => subscription.remove();
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -11,7 +22,7 @@ export default function GoalsScreen() {
 
       <View style={styles.card}>
         <Text style={styles.label}>Current Steps</Text>
-        <Text style={styles.value}>{currentSteps}</Text>
+        <Text style={styles.value}>{steps}</Text>
       </View>
 
       <View style={styles.card}>
@@ -30,32 +41,28 @@ export default function GoalsScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: "#F5F7FA",
     padding: 20,
     justifyContent: "center",
   },
-
   title: {
     fontSize: 30,
     fontWeight: "bold",
     marginBottom: 30,
     textAlign: "center",
   },
-
   card: {
-    backgroundColor: "#f2f2f2",
-    padding: 20,
-    borderRadius: 15,
-    marginBottom: 20,
+    backgroundColor: "#fff",
+    padding: 22,
+    borderRadius: 18,
+    marginBottom: 18,
   },
-
   label: {
     fontSize: 18,
     color: "#666",
   },
-
   value: {
-    fontSize: 28,
+    fontSize: 30,
     fontWeight: "bold",
     marginTop: 10,
   },

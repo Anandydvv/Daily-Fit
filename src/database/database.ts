@@ -94,6 +94,12 @@ export const getActivities = async (): Promise<Activity[]> => {
   );
 };
 
+export const clearActivities = async () => {
+  await createActivityTable();
+
+  await db.runAsync("DELETE FROM activities");
+};
+
 export const getWeeklyStepData = async () => {
   await createActivityTable();
 
@@ -107,7 +113,6 @@ export const getWeeklyStepData = async () => {
 
   rows.forEach((item) => {
     const day = new Date(item.date).getDay();
-
     const index = day === 0 ? 6 : day - 1;
 
     data[index] += item.steps || 0;

@@ -1,25 +1,59 @@
 import { useFocusEffect } from "@react-navigation/native";
 import { useCallback, useState } from "react";
-import { ScrollView, StyleSheet, Text, View } from "react-native";
-import { Activity, getActivities } from "../database/database";
+import {
+  Alert,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import { Activity, clearActivities, getActivities } from "../database/database";
 
 export default function HistoryScreen() {
   const [activities, setActivities] = useState<Activity[]>([]);
 
+  const loadActivities = async () => {
+    const data = await getActivities();
+    setActivities(data);
+  };
+
   useFocusEffect(
     useCallback(() => {
-      const loadActivities = async () => {
-        const data = await getActivities();
-        setActivities(data);
-      };
-
       loadActivities();
     }, []),
   );
 
+  const clearHistory = async () => {
+    Alert.alert(
+      "Clear History",
+      "Are you sure you want to delete all saved activity records?",
+      [
+        {
+          text: "Cancel",
+          style: "cancel",
+        },
+        {
+          text: "Clear",
+          style: "destructive",
+          onPress: async () => {
+            await clearActivities();
+            setActivities([]);
+          },
+        },
+      ],
+    );
+  };
+
   return (
     <ScrollView style={styles.container}>
       <Text style={styles.title}>Activity History</Text>
+
+      {activities.length > 0 && (
+        <TouchableOpacity style={styles.clearButton} onPress={clearHistory}>
+          <Text style={styles.clearButtonText}>Clear History</Text>
+        </TouchableOpacity>
+      )}
 
       {activities.length === 0 ? (
         <Text style={styles.emptyText}>No activity records yet.</Text>
@@ -40,7 +74,9 @@ export default function HistoryScreen() {
 
             <View style={styles.row}>
               <Text style={styles.label}>Distance</Text>
-              <Text style={styles.value}>{item.distance.toFixed(2)} km</Text>
+              <Text style={styles.value}>
+                {Number(item.distance || 0).toFixed(2)} km
+              </Text>
             </View>
 
             <View style={styles.row}>
@@ -71,6 +107,20 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     marginVertical: 20,
     textAlign: "center",
+  },
+
+  clearButton: {
+    backgroundColor: "#E53935",
+    padding: 14,
+    borderRadius: 14,
+    alignItems: "center",
+    marginBottom: 20,
+  },
+
+  clearButtonText: {
+    color: "#fff",
+    fontWeight: "bold",
+    fontSize: 16,
   },
 
   card: {

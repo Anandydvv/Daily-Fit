@@ -142,9 +142,17 @@ export default function LocationScreen() {
       return;
     }
 
-    const finishTime = new Date();
-
     const steps = estimateSteps(distance);
+
+    if (distance < 0.01 || steps < 10) {
+      Alert.alert(
+        "Walk Too Short",
+        "Walk a little longer before saving the session.",
+      );
+      return;
+    }
+
+    const finishTime = new Date();
     const calories = estimateCalories(distance);
 
     await insertActivity(

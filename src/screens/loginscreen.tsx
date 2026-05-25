@@ -1,5 +1,7 @@
 import { useNavigation } from "@react-navigation/native";
 import {
+  KeyboardAvoidingView,
+  Platform,
   ScrollView,
   StyleSheet,
   Text,
@@ -12,59 +14,79 @@ export default function LoginScreen() {
   const navigation = useNavigation<any>();
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      <View style={styles.logoBox}>
-        <Text style={styles.logoText}>DailyFit</Text>
-      </View>
+    <KeyboardAvoidingView
+      style={styles.keyboardView}
+      behavior={Platform.OS === "ios" ? "padding" : undefined}
+    >
+      <ScrollView
+        contentContainerStyle={styles.container}
+        keyboardShouldPersistTaps="handled"
+      >
+        <View style={styles.logoBox}>
+          <Text style={styles.logoText}>DailyFit</Text>
+        </View>
 
-      <Text style={styles.tagline}>Stay Active. Stay Healthy. Stay You.</Text>
+        <Text style={styles.tagline}>Stay Active. Stay Healthy. Stay You.</Text>
 
-      <View style={styles.illustrationBox}>
-        <Text style={styles.character}>🏃‍♂️</Text>
-        <Text style={styles.healthIcon}>💚</Text>
-        <Text style={styles.healthText}>Healthy habits start today</Text>
-      </View>
+        <View style={styles.illustrationBox}>
+          <Text style={styles.character}>🏃‍♂️</Text>
+          <Text style={styles.healthIcon}>💚</Text>
+          <Text style={styles.healthText}>Healthy habits start today</Text>
+        </View>
 
-      <View style={styles.loginCard}>
-        <Text style={styles.cardTitle}>Let’s begin your</Text>
-        <Text style={styles.cardTitleGreen}>health journey ♡</Text>
+        <View style={styles.loginCard}>
+          <Text style={styles.cardTitle}>Let’s begin your</Text>
+          <Text style={styles.cardTitleGreen}>health journey ♡</Text>
 
-        <TextInput placeholder="Email" placeholderTextColor="#9E9E9E" style={styles.input} />
+          <TextInput
+            placeholder="Email"
+            placeholderTextColor="#9E9E9E"
+            keyboardType="email-address"
+            autoCapitalize="none"
+            style={styles.input}
+          />
 
-        <TextInput
-          placeholder="Password"
-          placeholderTextColor="#9E9E9E"
-          secureTextEntry
-          style={styles.input}
-        />
+          <TextInput
+            placeholder="Password"
+            placeholderTextColor="#9E9E9E"
+            secureTextEntry
+            style={styles.input}
+          />
 
-        <TouchableOpacity>
-          <Text style={styles.forgotText}>Forgot Password?</Text>
-        </TouchableOpacity>
+          <TouchableOpacity>
+            <Text style={styles.forgotText}>Forgot Password?</Text>
+          </TouchableOpacity>
 
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => navigation.navigate("Dashboard")}
-        >
-          <Text style={styles.buttonText}>Go for it →</Text>
-        </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => navigation.navigate("Dashboard")}
+          >
+            <Text style={styles.buttonText}>Go for it →</Text>
+          </TouchableOpacity>
 
-        <TouchableOpacity onPress={() => navigation.navigate("Signup")}>
-          <Text style={styles.signupText}>
-            Don’t have an account? <Text style={styles.signupGreen}>Sign up</Text>
-          </Text>
-        </TouchableOpacity>
-      </View>
-    </ScrollView>
+          <TouchableOpacity onPress={() => navigation.navigate("Signup")}>
+            <Text style={styles.signupText}>
+              Don’t have an account?{" "}
+              <Text style={styles.signupGreen}>Sign up</Text>
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 }
 
 const styles = StyleSheet.create({
+  keyboardView: {
+    flex: 1,
+    backgroundColor: "#EEF8EC",
+  },
+
   container: {
     flexGrow: 1,
     backgroundColor: "#EEF8EC",
     padding: 18,
-    paddingBottom: 30,
+    paddingBottom: 60,
     alignItems: "center",
     justifyContent: "center",
   },
@@ -95,7 +117,7 @@ const styles = StyleSheet.create({
 
   illustrationBox: {
     width: "100%",
-    height: 170,
+    height: 150,
     marginTop: 8,
     borderRadius: 28,
     alignItems: "center",
@@ -103,11 +125,11 @@ const styles = StyleSheet.create({
   },
 
   character: {
-    fontSize: 82,
+    fontSize: 74,
   },
 
   healthIcon: {
-    fontSize: 28,
+    fontSize: 26,
     marginTop: -8,
   },
 

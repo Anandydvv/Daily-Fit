@@ -9,6 +9,12 @@ import {
   View,
 } from "react-native";
 
+import {
+  BannerAd,
+  BannerAdSize,
+  TestIds,
+} from "react-native-google-mobile-ads";
+
 import { createActivityTable, insertActivity } from "../database/database";
 
 export default function DashboardScreen() {
@@ -65,7 +71,7 @@ export default function DashboardScreen() {
 
     if (startTime) {
       await insertActivity(
-        finish.toISOString().split("T")[0],
+        new Date().toLocaleDateString(),
         startTime.toLocaleTimeString(),
         finish.toLocaleTimeString(),
         sessionSteps,
@@ -74,7 +80,7 @@ export default function DashboardScreen() {
         0,
         0,
         0,
-        0,
+        0
       );
     }
   };
@@ -87,7 +93,7 @@ export default function DashboardScreen() {
       </View>
 
       <View style={styles.heroCard}>
-        <Text style={styles.heroLabel}>Today's Activity</Text>
+        <Text style={styles.heroLabel}>Today&apos;s Activity</Text>
 
         <Text style={styles.heroSteps}>{steps}</Text>
 
@@ -154,7 +160,7 @@ export default function DashboardScreen() {
           </TouchableOpacity>
         ) : (
           <TouchableOpacity
-            style={[styles.walkButton, { backgroundColor: "#D32F2F" }]}
+            style={[styles.walkButton, styles.stopButton]}
             onPress={finishWalk}
           >
             <Text style={styles.walkButtonText}>Finish Walk</Text>
@@ -204,6 +210,37 @@ export default function DashboardScreen() {
           <Text style={styles.actionEmoji}>📈</Text>
           <Text style={styles.actionText}>Progress</Text>
         </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.actionCard}
+          onPress={() => navigation.navigate("History")}
+        >
+          <Text style={styles.actionEmoji}>📋</Text>
+          <Text style={styles.actionText}>History</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.actionCard}
+          onPress={() => navigation.navigate("Accelerometer")}
+        >
+          <Text style={styles.actionEmoji}>📱</Text>
+          <Text style={styles.actionText}>Accelerometer</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.actionCard}
+          onPress={() => navigation.navigate("Gyroscope")}
+        >
+          <Text style={styles.actionEmoji}>🌀</Text>
+          <Text style={styles.actionText}>Gyroscope</Text>
+        </TouchableOpacity>
+      </View>
+
+      <View style={styles.adContainer}>
+        <BannerAd
+          unitId={TestIds.BANNER}
+          size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER}
+        />
       </View>
     </ScrollView>
   );
@@ -215,6 +252,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#0F172A",
     padding: 20,
     paddingTop: 50,
+    paddingBottom: 40,
   },
 
   header: {
@@ -342,11 +380,10 @@ const styles = StyleSheet.create({
     borderRadius: 18,
     marginTop: 20,
   },
-  
-  actionIcon: {
-  fontSize: 32,
-  marginBottom: 10,
-},
+
+  stopButton: {
+    backgroundColor: "#D32F2F",
+  },
 
   walkButtonText: {
     color: "#FFFFFF",
@@ -386,5 +423,11 @@ const styles = StyleSheet.create({
     color: "#FFFFFF",
     fontWeight: "bold",
     fontSize: 16,
+    textAlign: "center",
+  },
+
+  adContainer: {
+    marginTop: 25,
+    alignItems: "center",
   },
 });

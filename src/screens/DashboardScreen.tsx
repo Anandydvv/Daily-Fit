@@ -219,6 +219,23 @@ export default function DashboardScreen() {
 
           <Text style={styles.actionText}>Progress</Text>
         </TouchableOpacity>
+
+       <TouchableOpacity
+  style={styles.actionCard}
+  onPress={() => navigation.navigate("Accelerometer")}
+>
+  <Text style={styles.actionIcon}>📱</Text>
+  <Text style={styles.actionText}>Accelerometer</Text>
+</TouchableOpacity>
+
+<TouchableOpacity
+  style={styles.actionCard}
+  onPress={() => navigation.navigate("Gyroscope")}
+>
+  <Text style={styles.actionIcon}>🌀</Text>
+  <Text style={styles.actionText}>Gyroscope</Text>
+</TouchableOpacity>
+
       </View>
     </ScrollView>
   );
@@ -357,6 +374,11 @@ const styles = StyleSheet.create({
     borderRadius: 18,
     marginTop: 20,
   },
+  
+  actionIcon: {
+  fontSize: 32,
+  marginBottom: 10,
+},
 
   walkButtonText: {
     color: "#FFFFFF",

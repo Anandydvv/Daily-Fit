@@ -8,9 +8,11 @@ import GyroscopeScreen from "../screens/GyroscopeScreen";
 import HistoryScreen from "../screens/HistoryScreen";
 import LocationScreen from "../screens/LocationScreen";
 import LoginScreen from "../screens/loginscreen";
+import ProfileScreen from "../screens/ProfileScreen";
 import ProgressScreen from "../screens/ProgressScreen";
 import ReminderScreen from "../screens/ReminderScreen";
 import SignupScreen from "../screens/SignupScreen";
+
 const Stack = createNativeStackNavigator();
 
 export default function AppNavigator() {
@@ -27,6 +29,7 @@ export default function AppNavigator() {
       <Stack.Screen name="Progress" component={ProgressScreen} />
       <Stack.Screen name="Accelerometer" component={AccelerometerScreen} />
       <Stack.Screen name="Gyroscope" component={GyroscopeScreen} />
+      <Stack.Screen name="Profile" component={ProfileScreen} />
     </Stack.Navigator>
   );
 }

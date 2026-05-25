@@ -16,17 +16,14 @@ export default function DashboardScreen() {
 
   const [steps, setSteps] = useState(0);
   const [isAvailable, setIsAvailable] = useState(false);
-
   const [walking, setWalking] = useState(false);
   const [sessionSteps, setSessionSteps] = useState(0);
   const [startStepCount, setStartStepCount] = useState(0);
-
   const [startTime, setStartTime] = useState<Date | null>(null);
   const [endTime, setEndTime] = useState<Date | null>(null);
 
   const calories = Math.round(steps * 0.04);
   const sessionCalories = Math.round(sessionSteps * 0.04);
-
   const goal = 10000;
   const progress = Math.min(Math.round((steps / goal) * 100), 100);
 
@@ -63,20 +60,22 @@ export default function DashboardScreen() {
     setWalking(false);
     setEndTime(finish);
 
-    if (startTime) {
-      await insertActivity(
-        finish.toISOString().split("T")[0],
-        startTime.toLocaleTimeString(),
-        finish.toLocaleTimeString(),
-        sessionSteps,
-        sessionCalories,
-        0,
-        0,
-        0,
-        0,
-        0,
-      );
+    if (sessionSteps <= 0 || !startTime) {
+      return;
     }
+
+    await insertActivity(
+      finish.toISOString().split("T")[0],
+      startTime.toLocaleTimeString(),
+      finish.toLocaleTimeString(),
+      sessionSteps,
+      sessionCalories,
+      0,
+      0,
+      0,
+      0,
+      0,
+    );
   };
 
   return (
@@ -88,7 +87,6 @@ export default function DashboardScreen() {
 
       <View style={styles.heroCard}>
         <Text style={styles.heroLabel}>Today's Activity</Text>
-
         <Text style={styles.heroSteps}>{steps}</Text>
 
         <Text style={styles.heroSub}>
@@ -203,6 +201,22 @@ export default function DashboardScreen() {
         >
           <Text style={styles.actionEmoji}>📈</Text>
           <Text style={styles.actionText}>Progress</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.actionCard}
+          onPress={() => navigation.navigate("History")}
+        >
+          <Text style={styles.actionEmoji}>📜</Text>
+          <Text style={styles.actionText}>History</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.actionCard}
+          onPress={() => navigation.navigate("Profile")}
+        >
+          <Text style={styles.actionEmoji}>👤</Text>
+          <Text style={styles.actionText}>Profile</Text>
         </TouchableOpacity>
       </View>
     </ScrollView>
@@ -342,11 +356,6 @@ const styles = StyleSheet.create({
     borderRadius: 18,
     marginTop: 20,
   },
-  
-  actionIcon: {
-  fontSize: 32,
-  marginBottom: 10,
-},
 
   walkButtonText: {
     color: "#FFFFFF",

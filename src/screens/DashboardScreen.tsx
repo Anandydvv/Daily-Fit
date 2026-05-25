@@ -8,236 +8,121 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-
-import {
-  BannerAd,
-  BannerAdSize,
-  TestIds,
-} from "react-native-google-mobile-ads";
-
-import { createActivityTable, insertActivity } from "../database/database";
+import { stemmActivities } from "../data/stemmActivities";
 
 export default function DashboardScreen() {
   const navigation = useNavigation<any>();
 
   const [steps, setSteps] = useState(0);
   const [isAvailable, setIsAvailable] = useState(false);
-  const [walking, setWalking] = useState(false);
-  const [sessionSteps, setSessionSteps] = useState(0);
-  const [startStepCount, setStartStepCount] = useState(0);
-  const [startTime, setStartTime] = useState<Date | null>(null);
-  const [endTime, setEndTime] = useState<Date | null>(null);
 
   const calories = Math.round(steps * 0.04);
-  const sessionCalories = Math.round(sessionSteps * 0.04);
-  const goal = 10000;
-  const progress = Math.min(Math.round((steps / goal) * 100), 100);
 
   useEffect(() => {
-    createActivityTable();
-
     Pedometer.isAvailableAsync().then((result) => {
       setIsAvailable(result);
     });
 
     const subscription = Pedometer.watchStepCount((result) => {
       setSteps(result.steps);
-
-      if (walking) {
-        const currentSessionSteps = Math.max(result.steps - startStepCount, 0);
-        setSessionSteps(currentSessionSteps);
-      }
     });
 
     return () => subscription.remove();
-  }, [walking, startStepCount]);
-
-  const startWalk = () => {
-    setWalking(true);
-    setSessionSteps(0);
-    setStartStepCount(steps);
-    setStartTime(new Date());
-    setEndTime(null);
-  };
-
-  const finishWalk = async () => {
-    const finish = new Date();
-
-    setWalking(false);
-    setEndTime(finish);
-
-    if (startTime) {
-      await insertActivity(
-        finish.toISOString().split("T")[0],
-        startTime.toLocaleTimeString(),
-        finish.toLocaleTimeString(),
-        sessionSteps,
-        sessionCalories,
-        0,
-        0,
-        0,
-        0,
-        0
-      );
-    }
-  };
+  }, []);
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.greeting}>Good Morning 👋</Text>
-        <Text style={styles.headerTitle}>DailyFit Dashboard</Text>
+        <Text style={styles.appName}>STEMM Lab</Text>
+        <Text style={styles.subtitle}>Real-World STEMM Games</Text>
       </View>
 
       <View style={styles.heroCard}>
-        <Text style={styles.heroLabel}>Today's Activity</Text>
-
-        <Text style={styles.heroSteps}>{steps}</Text>
-
-        <Text style={styles.heroSub}>
-          {progress}% of {goal} step goal
-        </Text>
+        <Text style={styles.heroTitle}>Today&apos;s STEMM Activity Data</Text>
+        <Text style={styles.heroNumber}>{steps}</Text>
+        <Text style={styles.heroText}>movement steps detected</Text>
 
         <View style={styles.statsRow}>
           <View style={styles.statBox}>
             <Text style={styles.statValue}>{calories}</Text>
-            <Text style={styles.statLabel}>Calories</Text>
+            <Text style={styles.statLabel}>Energy Estimate</Text>
           </View>
 
           <View style={styles.statBox}>
             <Text style={styles.statValue}>{isAvailable ? "ON" : "OFF"}</Text>
-            <Text style={styles.statLabel}>Pedometer</Text>
+            <Text style={styles.statLabel}>Sensor</Text>
           </View>
         </View>
       </View>
 
-      <View style={styles.sessionCard}>
-        <View style={styles.sessionHeader}>
-          <Text style={styles.sessionTitle}>Walking Session</Text>
+      <Text style={styles.sectionTitle}>STEMM Challenges</Text>
 
-          <View
-            style={[
-              styles.statusDot,
-              { backgroundColor: walking ? "#00E676" : "#FF5252" },
-            ]}
-          />
-        </View>
+      {stemmActivities.map((activity) => (
+        <TouchableOpacity
+          key={activity.id}
+          style={styles.activityCard}
+          onPress={() =>
+            navigation.navigate("ActivityDetail", {
+              activityId: activity.id,
+            })
+          }
+        >
+          <Text style={styles.activityArea}>{activity.area}</Text>
+          <Text style={styles.activityTitle}>{activity.title}</Text>
+          <Text style={styles.activityText}>{activity.overview}</Text>
+        </TouchableOpacity>
+      ))}
 
-        <Text style={styles.sessionStatus}>
-          {walking ? "ACTIVE" : "NOT ACTIVE"}
-        </Text>
-
-        <View style={styles.sessionStats}>
-          <View>
-            <Text style={styles.sessionNumber}>{sessionSteps}</Text>
-            <Text style={styles.sessionText}>Session Steps</Text>
-          </View>
-
-          <View>
-            <Text style={styles.sessionNumber}>{sessionCalories}</Text>
-            <Text style={styles.sessionText}>Calories</Text>
-          </View>
-        </View>
-
-        {startTime && (
-          <Text style={styles.timeText}>
-            Started: {startTime.toLocaleTimeString()}
-          </Text>
-        )}
-
-        {endTime && (
-          <Text style={styles.timeText}>
-            Finished: {endTime.toLocaleTimeString()}
-          </Text>
-        )}
-
-        {!walking ? (
-          <TouchableOpacity style={styles.walkButton} onPress={startWalk}>
-            <Text style={styles.walkButtonText}>Start Walk</Text>
-          </TouchableOpacity>
-        ) : (
-          <TouchableOpacity
-            style={[styles.walkButton, styles.stopButton]}
-            onPress={finishWalk}
-          >
-            <Text style={styles.walkButtonText}>Finish Walk</Text>
-          </TouchableOpacity>
-        )}
-      </View>
-
-      <Text style={styles.sectionTitle}>Quick Actions</Text>
+      <Text style={styles.sectionTitle}>App Tools</Text>
 
       <View style={styles.grid}>
         <TouchableOpacity
-          style={styles.actionCard}
-          onPress={() => navigation.navigate("Goals")}
-        >
-          <Text style={styles.actionEmoji}>🎯</Text>
-          <Text style={styles.actionText}>Goals</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={styles.actionCard}
-          onPress={() => navigation.navigate("Location")}
-        >
-          <Text style={styles.actionEmoji}>📍</Text>
-          <Text style={styles.actionText}>GPS</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={styles.actionCard}
-          onPress={() => navigation.navigate("Reminder")}
-        >
-          <Text style={styles.actionEmoji}>⏰</Text>
-          <Text style={styles.actionText}>Reminder</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={styles.actionCard}
-          onPress={() => navigation.navigate("Battery")}
-        >
-          <Text style={styles.actionEmoji}>🔋</Text>
-          <Text style={styles.actionText}>Battery</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={styles.actionCard}
-          onPress={() => navigation.navigate("Progress")}
-        >
-          <Text style={styles.actionEmoji}>📈</Text>
-          <Text style={styles.actionText}>Progress</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={styles.actionCard}
-          onPress={() => navigation.navigate("History")}
-        >
-          <Text style={styles.actionEmoji}>📋</Text>
-          <Text style={styles.actionText}>History</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={styles.actionCard}
+          style={styles.toolCard}
           onPress={() => navigation.navigate("Accelerometer")}
         >
-          <Text style={styles.actionEmoji}>📱</Text>
-          <Text style={styles.actionText}>Accelerometer</Text>
+          <Text style={styles.toolEmoji}>📱</Text>
+          <Text style={styles.toolText}>Motion Sensor</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
-          style={styles.actionCard}
+          style={styles.toolCard}
           onPress={() => navigation.navigate("Gyroscope")}
         >
-          <Text style={styles.actionEmoji}>🌀</Text>
-          <Text style={styles.actionText}>Gyroscope</Text>
+          <Text style={styles.toolEmoji}>🌀</Text>
+          <Text style={styles.toolText}>Gyroscope</Text>
         </TouchableOpacity>
-      </View>
 
-      <View style={styles.adContainer}>
-        <BannerAd
-          unitId={TestIds.BANNER}
-          size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER}
-        />
+        <TouchableOpacity
+          style={styles.toolCard}
+          onPress={() => navigation.navigate("Location")}
+        >
+          <Text style={styles.toolEmoji}>📍</Text>
+          <Text style={styles.toolText}>GPS Tag</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.toolCard}
+          onPress={() => navigation.navigate("History")}
+        >
+          <Text style={styles.toolEmoji}>📋</Text>
+          <Text style={styles.toolText}>Results</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.toolCard}
+          onPress={() => navigation.navigate("Progress")}
+        >
+          <Text style={styles.toolEmoji}>📈</Text>
+          <Text style={styles.toolText}>Analytics</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.toolCard}
+          onPress={() => navigation.navigate("Reminder")}
+        >
+          <Text style={styles.toolEmoji}>⏱️</Text>
+          <Text style={styles.toolText}>Timed Challenge</Text>
+        </TouchableOpacity>
       </View>
     </ScrollView>
   );
@@ -248,183 +133,116 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     backgroundColor: "#0F172A",
     padding: 20,
-    paddingTop: 50,
+    paddingTop: 55,
     paddingBottom: 40,
   },
-
   header: {
-    marginBottom: 25,
+    marginBottom: 24,
   },
-
-  greeting: {
-    color: "#94A3B8",
-    fontSize: 16,
-  },
-
-  headerTitle: {
+  appName: {
     color: "#FFFFFF",
-    fontSize: 30,
+    fontSize: 38,
     fontWeight: "bold",
-    marginTop: 5,
   },
-
+  subtitle: {
+    color: "#38BDF8",
+    fontSize: 17,
+    marginTop: 6,
+    fontWeight: "600",
+  },
   heroCard: {
     backgroundColor: "#1E293B",
     borderRadius: 28,
-    padding: 28,
-    marginBottom: 25,
+    padding: 25,
+    marginBottom: 28,
   },
-
-  heroLabel: {
-    color: "#94A3B8",
-    fontSize: 16,
-  },
-
-  heroSteps: {
-    color: "#FFFFFF",
-    fontSize: 58,
-    fontWeight: "bold",
-    marginTop: 12,
-  },
-
-  heroSub: {
+  heroTitle: {
     color: "#CBD5E1",
-    fontSize: 15,
-    marginTop: 8,
+    fontSize: 16,
+    marginBottom: 10,
   },
-
+  heroNumber: {
+    color: "#FFFFFF",
+    fontSize: 55,
+    fontWeight: "bold",
+  },
+  heroText: {
+    color: "#94A3B8",
+    fontSize: 15,
+  },
   statsRow: {
     flexDirection: "row",
-    marginTop: 25,
-    gap: 15,
+    gap: 14,
+    marginTop: 22,
   },
-
   statBox: {
     flex: 1,
     backgroundColor: "#334155",
     borderRadius: 18,
-    padding: 18,
+    padding: 16,
     alignItems: "center",
   },
-
   statValue: {
-    color: "#00E676",
+    color: "#22C55E",
     fontSize: 24,
     fontWeight: "bold",
   },
-
   statLabel: {
     color: "#CBD5E1",
     marginTop: 5,
-  },
-
-  sessionCard: {
-    backgroundColor: "#1E293B",
-    borderRadius: 28,
-    padding: 25,
-    marginBottom: 30,
-  },
-
-  sessionHeader: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-  },
-
-  sessionTitle: {
-    color: "#FFFFFF",
-    fontSize: 22,
-    fontWeight: "bold",
-  },
-
-  statusDot: {
-    width: 14,
-    height: 14,
-    borderRadius: 50,
-  },
-
-  sessionStatus: {
-    color: "#94A3B8",
-    marginTop: 8,
-    marginBottom: 25,
-  },
-
-  sessionStats: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginBottom: 20,
-  },
-
-  sessionNumber: {
-    color: "#FFFFFF",
-    fontSize: 30,
-    fontWeight: "bold",
-  },
-
-  sessionText: {
-    color: "#94A3B8",
-    marginTop: 5,
-  },
-
-  timeText: {
-    color: "#CBD5E1",
-    marginBottom: 8,
-  },
-
-  walkButton: {
-    backgroundColor: "#00C853",
-    padding: 16,
-    borderRadius: 18,
-    marginTop: 20,
-  },
-
-  stopButton: {
-    backgroundColor: "#D32F2F",
-  },
-
-  walkButtonText: {
-    color: "#FFFFFF",
     textAlign: "center",
-    fontWeight: "bold",
-    fontSize: 16,
   },
-
   sectionTitle: {
     color: "#FFFFFF",
-    fontSize: 22,
+    fontSize: 24,
     fontWeight: "bold",
-    marginBottom: 20,
+    marginBottom: 16,
+    marginTop: 8,
   },
-
+  activityCard: {
+    backgroundColor: "#1E293B",
+    borderRadius: 22,
+    padding: 20,
+    marginBottom: 16,
+  },
+  activityArea: {
+    color: "#38BDF8",
+    fontSize: 13,
+    fontWeight: "700",
+    marginBottom: 6,
+  },
+  activityTitle: {
+    color: "#FFFFFF",
+    fontSize: 20,
+    fontWeight: "bold",
+    marginBottom: 8,
+  },
+  activityText: {
+    color: "#CBD5E1",
+    fontSize: 14,
+    lineHeight: 21,
+  },
   grid: {
     flexDirection: "row",
     flexWrap: "wrap",
     justifyContent: "space-between",
-    gap: 15,
+    gap: 14,
   },
-
-  actionCard: {
+  toolCard: {
     width: "47%",
     backgroundColor: "#1E293B",
     borderRadius: 22,
-    padding: 25,
+    padding: 20,
     alignItems: "center",
   },
-
-  actionEmoji: {
-    fontSize: 34,
-    marginBottom: 12,
+  toolEmoji: {
+    fontSize: 32,
+    marginBottom: 10,
   },
-
-  actionText: {
+  toolText: {
     color: "#FFFFFF",
+    fontSize: 15,
     fontWeight: "bold",
-    fontSize: 16,
     textAlign: "center",
-  },
-
-  adContainer: {
-    marginTop: 25,
-    alignItems: "center",
   },
 });

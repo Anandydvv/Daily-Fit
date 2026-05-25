@@ -1,19 +1,19 @@
 {
   "expo": {
-    "name": "smart-fitness-tracker",
-    "slug": "smart-fitness-tracker",
+    "name": "STEMM Lab",
+"slug": "stemm-lab",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "smartfitnesstracker",
+    "scheme": "stemmlab",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.dailyfit.app"
+      "bundleIdentifier": "com.stemmlab.app"
     },
     "android": {
-      "package": "com.dailyfit.app",
+      "package": "com.stemmlab.app",
       "adaptiveIcon": {
         "backgroundColor": "#E6F4FE",
         "foregroundImage": "./assets/images/android-icon-foreground.png",

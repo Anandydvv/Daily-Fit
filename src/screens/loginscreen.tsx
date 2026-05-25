@@ -1,5 +1,12 @@
 import { useNavigation } from "@react-navigation/native";
 import {
+  sendPasswordResetEmail,
+  signInWithEmailAndPassword,
+} from "firebase/auth";
+import { useState } from "react";
+import {
+  ActivityIndicator,
+  Alert,
   KeyboardAvoidingView,
   Platform,
   ScrollView,
@@ -10,8 +17,48 @@ import {
   View,
 } from "react-native";
 
+import { auth } from "../firebaseConfig";
+
 export default function LoginScreen() {
   const navigation = useNavigation<any>();
+
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const loginUser = async () => {
+    if (!email || !password) {
+      Alert.alert("Missing Details", "Please enter email and password.");
+      return;
+    }
+
+    try {
+      setLoading(true);
+
+      await signInWithEmailAndPassword(auth, email.trim(), password);
+
+      navigation.replace("Dashboard");
+    } catch (error: any) {
+      Alert.alert("Login Failed", error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const resetPassword = async () => {
+    if (!email) {
+      Alert.alert("Enter Email", "Please enter your email first.");
+      return;
+    }
+
+    try {
+      await sendPasswordResetEmail(auth, email.trim());
+
+      Alert.alert("Password Reset", "Reset email sent successfully.");
+    } catch (error: any) {
+      Alert.alert("Error", error.message);
+    }
+  };
 
   return (
     <KeyboardAvoidingView
@@ -36,6 +83,7 @@ export default function LoginScreen() {
 
         <View style={styles.loginCard}>
           <Text style={styles.cardTitle}>Let’s begin your</Text>
+
           <Text style={styles.cardTitleGreen}>health journey ♡</Text>
 
           <TextInput
@@ -44,6 +92,8 @@ export default function LoginScreen() {
             keyboardType="email-address"
             autoCapitalize="none"
             style={styles.input}
+            value={email}
+            onChangeText={setEmail}
           />
 
           <TextInput
@@ -51,17 +101,24 @@ export default function LoginScreen() {
             placeholderTextColor="#9E9E9E"
             secureTextEntry
             style={styles.input}
+            value={password}
+            onChangeText={setPassword}
           />
 
-          <TouchableOpacity>
+          <TouchableOpacity onPress={resetPassword}>
             <Text style={styles.forgotText}>Forgot Password?</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
             style={styles.button}
-            onPress={() => navigation.navigate("Dashboard")}
+            onPress={loginUser}
+            disabled={loading}
           >
-            <Text style={styles.buttonText}>Go for it →</Text>
+            {loading ? (
+              <ActivityIndicator color="#fff" />
+            ) : (
+              <Text style={styles.buttonText}>Go for it →</Text>
+            )}
           </TouchableOpacity>
 
           <TouchableOpacity onPress={() => navigation.navigate("Signup")}>

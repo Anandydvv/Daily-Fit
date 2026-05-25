@@ -2,6 +2,7 @@ import * as Location from "expo-location";
 import { useEffect, useRef, useState } from "react";
 import { Alert, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import MapView, { Marker, Polyline } from "react-native-maps";
+import { insertActivity } from "../database/database";
 
 type LocationPoint = {
   latitude: number;
@@ -16,6 +17,8 @@ export default function LocationScreen() {
   const [distance, setDistance] = useState(0);
   const [tracking, setTracking] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
+  const [startTime, setStartTime] = useState<Date | null>(null);
+  const [startPoint, setStartPoint] = useState<LocationPoint | null>(null);
 
   const watcher = useRef<Location.LocationSubscription | null>(null);
 
@@ -66,6 +69,14 @@ export default function LocationScreen() {
     return (value * Math.PI) / 180;
   };
 
+  const estimateSteps = (walkDistanceKm: number) => {
+    return Math.round(walkDistanceKm * 1312);
+  };
+
+  const estimateCalories = (walkDistanceKm: number) => {
+    return Math.round(walkDistanceKm * 60);
+  };
+
   const startTracking = async () => {
     const { status } = await Location.requestForegroundPermissionsAsync();
 
@@ -74,9 +85,21 @@ export default function LocationScreen() {
       return;
     }
 
+    const currentLocation = await Location.getCurrentPositionAsync({
+      accuracy: Location.Accuracy.High,
+    });
+
+    const firstPoint = {
+      latitude: currentLocation.coords.latitude,
+      longitude: currentLocation.coords.longitude,
+    };
+
+    setLocation(currentLocation);
     setTracking(true);
-    setRoute([]);
+    setRoute([firstPoint]);
     setDistance(0);
+    setStartTime(new Date());
+    setStartPoint(firstPoint);
 
     watcher.current = await Location.watchPositionAsync(
       {
@@ -106,13 +129,49 @@ export default function LocationScreen() {
     );
   };
 
-  const stopTracking = () => {
+  const stopTracking = async () => {
     if (watcher.current) {
       watcher.current.remove();
       watcher.current = null;
     }
 
     setTracking(false);
+
+    if (!location || !startTime || !startPoint) {
+      Alert.alert("No Session", "No walking session was recorded.");
+      return;
+    }
+
+    const steps = estimateSteps(distance);
+
+    if (distance < 0.01 || steps < 10) {
+      Alert.alert(
+        "Walk Too Short",
+        "Walk a little longer before saving the session.",
+      );
+      return;
+    }
+
+    const finishTime = new Date();
+    const calories = estimateCalories(distance);
+
+    await insertActivity(
+      finishTime.toISOString().split("T")[0],
+      startTime.toLocaleTimeString(),
+      finishTime.toLocaleTimeString(),
+      steps,
+      calories,
+      Number(distance.toFixed(2)),
+      startPoint.latitude,
+      startPoint.longitude,
+      location.coords.latitude,
+      location.coords.longitude,
+    );
+
+    Alert.alert(
+      "Walk Saved",
+      `Distance: ${distance.toFixed(2)} km\nSteps: ${steps}\nCalories: ${calories}`,
+    );
   };
 
   if (errorMsg) {
@@ -171,6 +230,7 @@ export default function LocationScreen() {
 
       <View style={styles.infoCard}>
         <Text style={styles.label}>Tracking Status</Text>
+
         <Text style={tracking ? styles.active : styles.inactive}>
           {tracking ? "ACTIVE" : "NOT ACTIVE"}
         </Text>
@@ -182,19 +242,14 @@ export default function LocationScreen() {
           </View>
 
           <View>
-            <Text style={styles.statValue}>
-              {location.coords.accuracy
-                ? `${Math.round(location.coords.accuracy)}m`
-                : "N/A"}
-            </Text>
-            <Text style={styles.statLabel}>Accuracy</Text>
+            <Text style={styles.statValue}>{estimateSteps(distance)}</Text>
+            <Text style={styles.statLabel}>Steps</Text>
           </View>
         </View>
 
         <Text style={styles.coords}>
           Lat: {currentPoint.latitude.toFixed(6)}
         </Text>
-
         <Text style={styles.coords}>
           Lng: {currentPoint.longitude.toFixed(6)}
         </Text>
@@ -205,7 +260,7 @@ export default function LocationScreen() {
         onPress={tracking ? stopTracking : startTracking}
       >
         <Text style={styles.buttonText}>
-          {tracking ? "Stop Tracking" : "Start Tracking"}
+          {tracking ? "Stop & Save Walk" : "Start Tracking"}
         </Text>
       </TouchableOpacity>
     </View>

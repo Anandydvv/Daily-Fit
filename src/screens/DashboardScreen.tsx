@@ -19,17 +19,15 @@ export default function DashboardScreen() {
 
   const [walking, setWalking] = useState(false);
   const [sessionSteps, setSessionSteps] = useState(0);
+  const [startStepCount, setStartStepCount] = useState(0);
 
   const [startTime, setStartTime] = useState<Date | null>(null);
-
   const [endTime, setEndTime] = useState<Date | null>(null);
 
   const calories = Math.round(steps * 0.04);
-
   const sessionCalories = Math.round(sessionSteps * 0.04);
 
   const goal = 10000;
-
   const progress = Math.min(Math.round((steps / goal) * 100), 100);
 
   useEffect(() => {
@@ -43,16 +41,18 @@ export default function DashboardScreen() {
       setSteps(result.steps);
 
       if (walking) {
-        setSessionSteps(result.steps);
+        const currentSessionSteps = Math.max(result.steps - startStepCount, 0);
+        setSessionSteps(currentSessionSteps);
       }
     });
 
     return () => subscription.remove();
-  }, [walking]);
+  }, [walking, startStepCount]);
 
   const startWalk = () => {
     setWalking(true);
     setSessionSteps(0);
+    setStartStepCount(steps);
     setStartTime(new Date());
     setEndTime(null);
   };
@@ -65,11 +65,12 @@ export default function DashboardScreen() {
 
     if (startTime) {
       await insertActivity(
-        new Date().toLocaleDateString(),
+        finish.toISOString().split("T")[0],
         startTime.toLocaleTimeString(),
         finish.toLocaleTimeString(),
         sessionSteps,
         sessionCalories,
+        0,
         0,
         0,
         0,
@@ -80,14 +81,11 @@ export default function DashboardScreen() {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      {/* Header */}
       <View style={styles.header}>
         <Text style={styles.greeting}>Good Morning 👋</Text>
-
         <Text style={styles.headerTitle}>DailyFit Dashboard</Text>
       </View>
 
-      {/* Hero Card */}
       <View style={styles.heroCard}>
         <Text style={styles.heroLabel}>Today's Activity</Text>
 
@@ -100,19 +98,16 @@ export default function DashboardScreen() {
         <View style={styles.statsRow}>
           <View style={styles.statBox}>
             <Text style={styles.statValue}>{calories}</Text>
-
             <Text style={styles.statLabel}>Calories</Text>
           </View>
 
           <View style={styles.statBox}>
             <Text style={styles.statValue}>{isAvailable ? "ON" : "OFF"}</Text>
-
             <Text style={styles.statLabel}>Pedometer</Text>
           </View>
         </View>
       </View>
 
-      {/* Session Card */}
       <View style={styles.sessionCard}>
         <View style={styles.sessionHeader}>
           <Text style={styles.sessionTitle}>Walking Session</Text>
@@ -120,9 +115,7 @@ export default function DashboardScreen() {
           <View
             style={[
               styles.statusDot,
-              {
-                backgroundColor: walking ? "#00E676" : "#FF5252",
-              },
+              { backgroundColor: walking ? "#00E676" : "#FF5252" },
             ]}
           />
         </View>
@@ -134,13 +127,11 @@ export default function DashboardScreen() {
         <View style={styles.sessionStats}>
           <View>
             <Text style={styles.sessionNumber}>{sessionSteps}</Text>
-
             <Text style={styles.sessionText}>Session Steps</Text>
           </View>
 
           <View>
             <Text style={styles.sessionNumber}>{sessionCalories}</Text>
-
             <Text style={styles.sessionText}>Calories</Text>
           </View>
         </View>
@@ -171,7 +162,6 @@ export default function DashboardScreen() {
         )}
       </View>
 
-      {/* Quick Actions */}
       <Text style={styles.sectionTitle}>Quick Actions</Text>
 
       <View style={styles.grid}>
@@ -180,7 +170,6 @@ export default function DashboardScreen() {
           onPress={() => navigation.navigate("Goals")}
         >
           <Text style={styles.actionEmoji}>🎯</Text>
-
           <Text style={styles.actionText}>Goals</Text>
         </TouchableOpacity>
 
@@ -189,7 +178,6 @@ export default function DashboardScreen() {
           onPress={() => navigation.navigate("Location")}
         >
           <Text style={styles.actionEmoji}>📍</Text>
-
           <Text style={styles.actionText}>GPS</Text>
         </TouchableOpacity>
 
@@ -198,7 +186,6 @@ export default function DashboardScreen() {
           onPress={() => navigation.navigate("Reminder")}
         >
           <Text style={styles.actionEmoji}>⏰</Text>
-
           <Text style={styles.actionText}>Reminder</Text>
         </TouchableOpacity>
 
@@ -207,7 +194,6 @@ export default function DashboardScreen() {
           onPress={() => navigation.navigate("Battery")}
         >
           <Text style={styles.actionEmoji}>🔋</Text>
-
           <Text style={styles.actionText}>Battery</Text>
         </TouchableOpacity>
 
@@ -216,26 +202,8 @@ export default function DashboardScreen() {
           onPress={() => navigation.navigate("Progress")}
         >
           <Text style={styles.actionEmoji}>📈</Text>
-
           <Text style={styles.actionText}>Progress</Text>
         </TouchableOpacity>
-
-       <TouchableOpacity
-  style={styles.actionCard}
-  onPress={() => navigation.navigate("Accelerometer")}
->
-  <Text style={styles.actionIcon}>📱</Text>
-  <Text style={styles.actionText}>Accelerometer</Text>
-</TouchableOpacity>
-
-<TouchableOpacity
-  style={styles.actionCard}
-  onPress={() => navigation.navigate("Gyroscope")}
->
-  <Text style={styles.actionIcon}>🌀</Text>
-  <Text style={styles.actionText}>Gyroscope</Text>
-</TouchableOpacity>
-
       </View>
     </ScrollView>
   );

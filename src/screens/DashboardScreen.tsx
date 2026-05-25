@@ -9,6 +9,11 @@ import {
   View,
 } from "react-native";
 
+import {
+  BannerAd,
+  BannerAdSize,
+  TestIds,
+} from "react-native-google-mobile-ads";
 
 import { createActivityTable, insertActivity } from "../database/database";
 
@@ -72,7 +77,7 @@ export default function DashboardScreen() {
         0,
         0,
         0,
-        0,
+        0
       );
     }
   };
@@ -202,6 +207,37 @@ export default function DashboardScreen() {
           <Text style={styles.actionEmoji}>📈</Text>
           <Text style={styles.actionText}>Progress</Text>
         </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.actionCard}
+          onPress={() => navigation.navigate("History")}
+        >
+          <Text style={styles.actionEmoji}>📋</Text>
+          <Text style={styles.actionText}>History</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.actionCard}
+          onPress={() => navigation.navigate("Accelerometer")}
+        >
+          <Text style={styles.actionEmoji}>📱</Text>
+          <Text style={styles.actionText}>Accelerometer</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.actionCard}
+          onPress={() => navigation.navigate("Gyroscope")}
+        >
+          <Text style={styles.actionEmoji}>🌀</Text>
+          <Text style={styles.actionText}>Gyroscope</Text>
+        </TouchableOpacity>
+      </View>
+
+      <View style={styles.adContainer}>
+        <BannerAd
+          unitId={TestIds.BANNER}
+          size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER}
+        />
       </View>
     </ScrollView>
   );
@@ -341,11 +377,10 @@ const styles = StyleSheet.create({
     borderRadius: 18,
     marginTop: 20,
   },
-  
-  actionIcon: {
-  fontSize: 32,
-  marginBottom: 10,
-},
+
+  stopButton: {
+    backgroundColor: "#D32F2F",
+  },
 
   walkButtonText: {
     color: "#FFFFFF",

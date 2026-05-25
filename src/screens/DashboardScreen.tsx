@@ -9,11 +9,6 @@ import {
   View,
 } from "react-native";
 
-import {
-  BannerAd,
-  BannerAdSize,
-  TestIds,
-} from "react-native-google-mobile-ads";
 
 import { createActivityTable, insertActivity } from "../database/database";
 
@@ -22,17 +17,14 @@ export default function DashboardScreen() {
 
   const [steps, setSteps] = useState(0);
   const [isAvailable, setIsAvailable] = useState(false);
-
   const [walking, setWalking] = useState(false);
   const [sessionSteps, setSessionSteps] = useState(0);
   const [startStepCount, setStartStepCount] = useState(0);
-
   const [startTime, setStartTime] = useState<Date | null>(null);
   const [endTime, setEndTime] = useState<Date | null>(null);
 
   const calories = Math.round(steps * 0.04);
   const sessionCalories = Math.round(sessionSteps * 0.04);
-
   const goal = 10000;
   const progress = Math.min(Math.round((steps / goal) * 100), 100);
 
@@ -71,7 +63,7 @@ export default function DashboardScreen() {
 
     if (startTime) {
       await insertActivity(
-        new Date().toLocaleDateString(),
+        finish.toISOString().split("T")[0],
         startTime.toLocaleTimeString(),
         finish.toLocaleTimeString(),
         sessionSteps,
@@ -80,7 +72,7 @@ export default function DashboardScreen() {
         0,
         0,
         0,
-        0
+        0,
       );
     }
   };
@@ -93,7 +85,7 @@ export default function DashboardScreen() {
       </View>
 
       <View style={styles.heroCard}>
-        <Text style={styles.heroLabel}>Today&apos;s Activity</Text>
+        <Text style={styles.heroLabel}>Today's Activity</Text>
 
         <Text style={styles.heroSteps}>{steps}</Text>
 
@@ -210,37 +202,6 @@ export default function DashboardScreen() {
           <Text style={styles.actionEmoji}>📈</Text>
           <Text style={styles.actionText}>Progress</Text>
         </TouchableOpacity>
-
-        <TouchableOpacity
-          style={styles.actionCard}
-          onPress={() => navigation.navigate("History")}
-        >
-          <Text style={styles.actionEmoji}>📋</Text>
-          <Text style={styles.actionText}>History</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={styles.actionCard}
-          onPress={() => navigation.navigate("Accelerometer")}
-        >
-          <Text style={styles.actionEmoji}>📱</Text>
-          <Text style={styles.actionText}>Accelerometer</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={styles.actionCard}
-          onPress={() => navigation.navigate("Gyroscope")}
-        >
-          <Text style={styles.actionEmoji}>🌀</Text>
-          <Text style={styles.actionText}>Gyroscope</Text>
-        </TouchableOpacity>
-      </View>
-
-      <View style={styles.adContainer}>
-        <BannerAd
-          unitId={TestIds.BANNER}
-          size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER}
-        />
       </View>
     </ScrollView>
   );
@@ -380,10 +341,11 @@ const styles = StyleSheet.create({
     borderRadius: 18,
     marginTop: 20,
   },
-
-  stopButton: {
-    backgroundColor: "#D32F2F",
-  },
+  
+  actionIcon: {
+  fontSize: 32,
+  marginBottom: 10,
+},
 
   walkButtonText: {
     color: "#FFFFFF",

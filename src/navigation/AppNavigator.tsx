@@ -15,6 +15,9 @@ import ReminderScreen from "../screens/ReminderScreen";
 import SignupScreen from "../screens/SignupScreen";
 import TeamSetupScreen from "../screens/TeamSetupScreen";
 
+// Activity screens
+import ParachuteDropScreen from "../screens/activities/ParachuteDropScreen";
+
 const Stack = createNativeStackNavigator();
 
 export default function AppNavigator() {
@@ -49,8 +52,12 @@ export default function AppNavigator() {
         component={DashboardScreen}
         options={{
           title: "STEMM Lab",
+          headerBackTitle: "Team Setup",
           headerStyle: { backgroundColor: "#0F172A" },
           headerTintColor: "#FFFFFF",
+          headerTitleStyle: {
+            fontWeight: "bold",
+          },
         }}
       />
 
@@ -61,6 +68,22 @@ export default function AppNavigator() {
           title: "STEMM Activity",
           headerStyle: { backgroundColor: "#0F172A" },
           headerTintColor: "#FFFFFF",
+          headerTitleStyle: {
+            fontWeight: "bold",
+          },
+        }}
+      />
+
+      <Stack.Screen
+        name="ParachuteDrop"
+        component={ParachuteDropScreen}
+        options={{
+          title: "Parachute Drop",
+          headerStyle: { backgroundColor: "#0F172A" },
+          headerTintColor: "#FFFFFF",
+          headerTitleStyle: {
+            fontWeight: "bold",
+          },
         }}
       />
 
@@ -69,6 +92,8 @@ export default function AppNavigator() {
         component={GoalsScreen}
         options={{
           title: "Challenge Goals",
+          headerStyle: { backgroundColor: "#0F172A" },
+          headerTintColor: "#FFFFFF",
         }}
       />
 
@@ -77,6 +102,8 @@ export default function AppNavigator() {
         component={LocationScreen}
         options={{
           title: "GPS Tag",
+          headerStyle: { backgroundColor: "#0F172A" },
+          headerTintColor: "#FFFFFF",
         }}
       />
 
@@ -85,6 +112,8 @@ export default function AppNavigator() {
         component={ReminderScreen}
         options={{
           title: "Timed Challenge",
+          headerStyle: { backgroundColor: "#0F172A" },
+          headerTintColor: "#FFFFFF",
         }}
       />
 
@@ -93,6 +122,8 @@ export default function AppNavigator() {
         component={BatteryScreen}
         options={{
           title: "Battery Monitor",
+          headerStyle: { backgroundColor: "#0F172A" },
+          headerTintColor: "#FFFFFF",
         }}
       />
 
@@ -101,6 +132,8 @@ export default function AppNavigator() {
         component={HistoryScreen}
         options={{
           title: "Activity Results",
+          headerStyle: { backgroundColor: "#0F172A" },
+          headerTintColor: "#FFFFFF",
         }}
       />
 
@@ -109,6 +142,8 @@ export default function AppNavigator() {
         component={ProgressScreen}
         options={{
           title: "Analytics",
+          headerStyle: { backgroundColor: "#0F172A" },
+          headerTintColor: "#FFFFFF",
         }}
       />
 
@@ -117,6 +152,8 @@ export default function AppNavigator() {
         component={AccelerometerScreen}
         options={{
           title: "Motion Sensor",
+          headerStyle: { backgroundColor: "#0F172A" },
+          headerTintColor: "#FFFFFF",
         }}
       />
 
@@ -125,6 +162,8 @@ export default function AppNavigator() {
         component={GyroscopeScreen}
         options={{
           title: "Gyroscope Sensor",
+          headerStyle: { backgroundColor: "#0F172A" },
+          headerTintColor: "#FFFFFF",
         }}
       />
 
@@ -133,6 +172,8 @@ export default function AppNavigator() {
         component={ProfileScreen}
         options={{
           title: "Team Profile",
+          headerStyle: { backgroundColor: "#0F172A" },
+          headerTintColor: "#FFFFFF",
         }}
       />
     </Stack.Navigator>

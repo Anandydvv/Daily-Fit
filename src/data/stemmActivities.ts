@@ -6,6 +6,7 @@ export type STEMMActivity = {
   equipment: string[];
   instructions: string[];
   sensorUse: string;
+  screenName?: string;
 };
 
 export const stemmActivities: STEMMActivity[] = [
@@ -13,6 +14,7 @@ export const stemmActivities: STEMMActivity[] = [
     id: "parachute",
     title: "Parachute Drop Challenge",
     area: "Engineering + Physics",
+    screenName: "ParachuteDrop",
     overview:
       "Design and test a parachute for a small toy. Record drop time, landing accuracy, and improve the design through repeated testing.",
     equipment: [

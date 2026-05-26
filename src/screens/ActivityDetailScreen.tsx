@@ -1,10 +1,11 @@
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import {
-    ScrollView,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
+  Alert,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from "react-native";
 import { stemmActivities } from "../data/stemmActivities";
 
@@ -19,7 +20,7 @@ export default function ActivityDetailScreen() {
   const route = useRoute<RouteProp<RouteParams, "ActivityDetail">>();
 
   const activity = stemmActivities.find(
-    (item) => item.id === route.params.activityId
+    (item) => item.id === route.params.activityId,
   );
 
   if (!activity) {
@@ -29,6 +30,18 @@ export default function ActivityDetailScreen() {
       </View>
     );
   }
+
+  const startActivity = () => {
+    if (activity.screenName) {
+      navigation.navigate(activity.screenName);
+      return;
+    }
+
+    Alert.alert(
+      "Coming Soon",
+      "This activity screen has not been implemented yet.",
+    );
+  };
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -43,7 +56,9 @@ export default function ActivityDetailScreen() {
       <View style={styles.card}>
         <Text style={styles.sectionTitle}>Equipment</Text>
         {activity.equipment.map((item) => (
-          <Text key={item} style={styles.listItem}>• {item}</Text>
+          <Text key={item} style={styles.listItem}>
+            • {item}
+          </Text>
         ))}
       </View>
 
@@ -56,37 +71,8 @@ export default function ActivityDetailScreen() {
         ))}
       </View>
 
-      <View style={styles.card}>
-        <Text style={styles.sectionTitle}>App Feature Used</Text>
-        <Text style={styles.text}>{activity.sensorUse}</Text>
-      </View>
-
-      <TouchableOpacity
-        style={styles.button}
-        onPress={() => navigation.navigate("Accelerometer")}
-      >
-        <Text style={styles.buttonText}>Open Motion Sensor</Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity
-        style={styles.button}
-        onPress={() => navigation.navigate("Gyroscope")}
-      >
-        <Text style={styles.buttonText}>Open Gyroscope</Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity
-        style={styles.button}
-        onPress={() => navigation.navigate("Location")}
-      >
-        <Text style={styles.buttonText}>Add GPS Location</Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity
-        style={styles.secondaryButton}
-        onPress={() => navigation.navigate("History")}
-      >
-        <Text style={styles.secondaryButtonText}>View Saved Results</Text>
+      <TouchableOpacity style={styles.startButton} onPress={startActivity}>
+        <Text style={styles.buttonText}>Start Activity</Text>
       </TouchableOpacity>
     </ScrollView>
   );
@@ -97,7 +83,7 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     backgroundColor: "#0F172A",
     padding: 20,
-    paddingTop: 55,
+    paddingTop: 80,
     paddingBottom: 40,
   },
   area: {
@@ -135,25 +121,13 @@ const styles = StyleSheet.create({
     lineHeight: 24,
     marginBottom: 4,
   },
-  button: {
-    backgroundColor: "#22C55E",
-    padding: 16,
+  startButton: {
+    backgroundColor: "#38BDF8",
+    padding: 17,
     borderRadius: 16,
     marginTop: 10,
   },
   buttonText: {
-    color: "#FFFFFF",
-    fontWeight: "bold",
-    textAlign: "center",
-    fontSize: 16,
-  },
-  secondaryButton: {
-    backgroundColor: "#334155",
-    padding: 16,
-    borderRadius: 16,
-    marginTop: 12,
-  },
-  secondaryButtonText: {
     color: "#FFFFFF",
     fontWeight: "bold",
     textAlign: "center",

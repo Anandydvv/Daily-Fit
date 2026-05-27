@@ -160,6 +160,60 @@ export default function HistoryScreen() {
     );
   };
 
+  const renderBreathingResult = (item: ActivityResult) => {
+    return (
+      <>
+        <View style={styles.infoBlock}>
+          <Text style={styles.label}>Prediction</Text>
+          <Text style={styles.value}>{item.prediction || "Not entered"}</Text>
+        </View>
+
+        <View style={styles.row}>
+          <Text style={styles.label}>Breathing at Rest</Text>
+          <Text style={styles.value}>{item.dropTime || "Not recorded"}</Text>
+        </View>
+
+        <View style={styles.row}>
+          <Text style={styles.label}>After Jogging</Text>
+          <Text style={styles.value}>{item.stopTime || "Not recorded"}</Text>
+        </View>
+
+        <View style={styles.row}>
+          <Text style={styles.label}>After Star Jumps</Text>
+          <Text style={styles.value}>
+            {item.finalVelocity || "Not recorded"}
+          </Text>
+        </View>
+
+        <View style={styles.infoBlock}>
+          <Text style={styles.label}>Change Summary</Text>
+          <Text style={styles.value}>
+            {item.acceleration || "Not calculated"}
+          </Text>
+        </View>
+
+        <View style={styles.infoBlock}>
+          <Text style={styles.label}>Reflection</Text>
+          <Text style={styles.value}>
+            {item.reflection || "No reflection added"}
+          </Text>
+        </View>
+      </>
+    );
+  };
+
+  const renderResultDetails = (item: ActivityResult) => {
+    if (item.activityId === "reaction") {
+      return renderReactionResult(item);
+    }
+
+    if (item.activityId === "breathing") {
+      return renderBreathingResult(item);
+    }
+
+    return renderParachuteResult(item);
+  };
+
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <Text style={styles.title}>Activity History</Text>
@@ -185,9 +239,7 @@ export default function HistoryScreen() {
             <Text style={styles.activityTitle}>{item.activityTitle}</Text>
             <Text style={styles.date}>{item.createdAt}</Text>
 
-            {item.activityId === "reaction"
-              ? renderReactionResult(item)
-              : renderParachuteResult(item)}
+            {renderResultDetails(item)}
           </View>
         ))
       )}
@@ -277,6 +329,7 @@ const styles = StyleSheet.create({
     padding: 14,
     borderRadius: 14,
     marginBottom: 10,
+    gap: 10,
   },
   infoBlock: {
     backgroundColor: "#334155",
@@ -294,6 +347,8 @@ const styles = StyleSheet.create({
     color: "#FFFFFF",
     fontSize: 15,
     lineHeight: 22,
+    flexShrink: 1,
+    textAlign: "right",
   },
   resultBox: {
     backgroundColor: "#334155",
@@ -327,8 +382,9 @@ const styles = StyleSheet.create({
   },
   highlightValue: {
     color: "#FFFFFF",
-    fontSize: 30,
+    fontSize: 26,
     fontWeight: "bold",
+    textAlign: "center",
   },
   videoBlock: {
     backgroundColor: "#334155",

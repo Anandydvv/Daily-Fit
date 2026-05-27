@@ -16,8 +16,6 @@ export default function DashboardScreen() {
   const [steps, setSteps] = useState(0);
   const [isAvailable, setIsAvailable] = useState(false);
 
-  const calories = Math.round(steps * 0.04);
-
   useEffect(() => {
     Pedometer.isAvailableAsync().then((result) => {
       setIsAvailable(result);
@@ -30,6 +28,10 @@ export default function DashboardScreen() {
     return () => subscription.remove();
   }, []);
 
+  const workingActivities = stemmActivities.filter(
+    (activity) => activity.screenName,
+  ).length;
+
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <View style={styles.header}>
@@ -38,19 +40,21 @@ export default function DashboardScreen() {
       </View>
 
       <View style={styles.heroCard}>
-        <Text style={styles.heroTitle}>Today&apos;s STEMM Activity Data</Text>
-        <Text style={styles.heroNumber}>{steps}</Text>
-        <Text style={styles.heroText}>movement steps detected</Text>
+        <Text style={styles.heroTitle}>Project Dashboard</Text>
+        <Text style={styles.heroMain}>{workingActivities}</Text>
+        <Text style={styles.heroText}>
+          working STEMM activities implemented
+        </Text>
 
         <View style={styles.statsRow}>
           <View style={styles.statBox}>
-            <Text style={styles.statValue}>{calories}</Text>
-            <Text style={styles.statLabel}>Energy Estimate</Text>
+            <Text style={styles.statValue}>{isAvailable ? "ON" : "OFF"}</Text>
+            <Text style={styles.statLabel}>Motion Sensor</Text>
           </View>
 
           <View style={styles.statBox}>
-            <Text style={styles.statValue}>{isAvailable ? "ON" : "OFF"}</Text>
-            <Text style={styles.statLabel}>Sensor</Text>
+            <Text style={styles.statValue}>{steps}</Text>
+            <Text style={styles.statLabel}>Live Steps</Text>
           </View>
         </View>
       </View>
@@ -67,7 +71,16 @@ export default function DashboardScreen() {
             })
           }
         >
-          <Text style={styles.activityArea}>{activity.area}</Text>
+          <View style={styles.activityHeader}>
+            <Text style={styles.activityArea}>{activity.area}</Text>
+
+            {activity.screenName ? (
+              <Text style={styles.readyBadge}>Ready</Text>
+            ) : (
+              <Text style={styles.comingBadge}>Coming Soon</Text>
+            )}
+          </View>
+
           <Text style={styles.activityTitle}>{activity.title}</Text>
           <Text style={styles.activityText}>{activity.overview}</Text>
         </TouchableOpacity>
@@ -76,6 +89,22 @@ export default function DashboardScreen() {
       <Text style={styles.sectionTitle}>App Tools</Text>
 
       <View style={styles.grid}>
+        <TouchableOpacity
+          style={styles.toolCard}
+          onPress={() => navigation.navigate("History")}
+        >
+          <Text style={styles.toolEmoji}>📋</Text>
+          <Text style={styles.toolText}>Saved Results</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.toolCard}
+          onPress={() => navigation.navigate("Battery")}
+        >
+          <Text style={styles.toolEmoji}>🔋</Text>
+          <Text style={styles.toolText}>Battery Monitor</Text>
+        </TouchableOpacity>
+
         <TouchableOpacity
           style={styles.toolCard}
           onPress={() => navigation.navigate("Accelerometer")}
@@ -102,10 +131,10 @@ export default function DashboardScreen() {
 
         <TouchableOpacity
           style={styles.toolCard}
-          onPress={() => navigation.navigate("History")}
+          onPress={() => navigation.navigate("Profile")}
         >
-          <Text style={styles.toolEmoji}>📋</Text>
-          <Text style={styles.toolText}>Results</Text>
+          <Text style={styles.toolEmoji}>👥</Text>
+          <Text style={styles.toolText}>Team Profile</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
@@ -161,7 +190,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginBottom: 10,
   },
-  heroNumber: {
+  heroMain: {
     color: "#FFFFFF",
     fontSize: 55,
     fontWeight: "bold",
@@ -205,11 +234,36 @@ const styles = StyleSheet.create({
     padding: 20,
     marginBottom: 16,
   },
+  activityHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 6,
+    gap: 10,
+  },
   activityArea: {
     color: "#38BDF8",
     fontSize: 13,
     fontWeight: "700",
-    marginBottom: 6,
+    flex: 1,
+  },
+  readyBadge: {
+    color: "#FFFFFF",
+    backgroundColor: "#22C55E",
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: 999,
+    fontSize: 12,
+    fontWeight: "bold",
+  },
+  comingBadge: {
+    color: "#CBD5E1",
+    backgroundColor: "#475569",
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: 999,
+    fontSize: 12,
+    fontWeight: "bold",
   },
   activityTitle: {
     color: "#FFFFFF",

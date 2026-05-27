@@ -15,6 +15,7 @@ import ReminderScreen from "../screens/ReminderScreen";
 import SignupScreen from "../screens/SignupScreen";
 import TeamSetupScreen from "../screens/TeamSetupScreen";
 
+import BreathingTrainerScreen from "../screens/activities/BreathingTrainerScreen";
 import ParachuteDropScreen from "../screens/activities/ParachuteDropScreen";
 import ReactionBoardScreen from "../screens/activities/ReactionBoardScreen";
 
@@ -92,6 +93,19 @@ export default function AppNavigator() {
         component={ReactionBoardScreen}
         options={{
           title: "Reaction Board",
+          headerStyle: { backgroundColor: "#0F172A" },
+          headerTintColor: "#FFFFFF",
+          headerTitleStyle: {
+            fontWeight: "bold",
+          },
+        }}
+      />
+
+      <Stack.Screen
+        name="BreathingTrainer"
+        component={BreathingTrainerScreen}
+        options={{
+          title: "Breathing Trainer",
           headerStyle: { backgroundColor: "#0F172A" },
           headerTintColor: "#FFFFFF",
           headerTitleStyle: {

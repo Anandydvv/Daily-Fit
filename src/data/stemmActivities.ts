@@ -87,6 +87,7 @@ export const stemmActivities: STEMMActivity[] = [
     id: "breathing",
     title: "Breathing Pace Trainer",
     area: "Medical Science",
+    screenName: "BreathingTrainer",
     overview:
       "Compare breathing movement at rest and after light exercise using phone motion sensors.",
     equipment: ["Mobile phone", "Flat surface or mat"],

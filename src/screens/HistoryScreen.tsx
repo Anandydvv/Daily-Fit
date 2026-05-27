@@ -66,6 +66,100 @@ export default function HistoryScreen() {
     );
   };
 
+  const renderParachuteResult = (item: ActivityResult) => {
+    return (
+      <>
+        <View style={styles.infoBlock}>
+          <Text style={styles.label}>Design</Text>
+          <Text style={styles.value}>{item.design || "Not entered"}</Text>
+        </View>
+
+        <View style={styles.infoBlock}>
+          <Text style={styles.label}>Prediction</Text>
+          <Text style={styles.value}>{item.prediction || "Not entered"}</Text>
+        </View>
+
+        <View style={styles.row}>
+          <Text style={styles.label}>Height</Text>
+          <Text style={styles.value}>{item.height || "N/A"} m</Text>
+        </View>
+
+        <View style={styles.row}>
+          <Text style={styles.label}>Mass</Text>
+          <Text style={styles.value}>{item.mass || "N/A"} kg</Text>
+        </View>
+
+        <View style={styles.row}>
+          <Text style={styles.label}>Drop Time</Text>
+          <Text style={styles.value}>{item.dropTime || "N/A"} sec</Text>
+        </View>
+
+        <View style={styles.row}>
+          <Text style={styles.label}>Stop Time</Text>
+          <Text style={styles.value}>{item.stopTime || "N/A"} sec</Text>
+        </View>
+
+        <View style={styles.resultBox}>
+          <Text style={styles.resultTitle}>Calculated Results</Text>
+          <Text style={styles.resultText}>
+            Final velocity: {item.finalVelocity} m/s
+          </Text>
+          <Text style={styles.resultText}>
+            Acceleration: {item.acceleration} m/s²
+          </Text>
+          <Text style={styles.resultText}>Net force: {item.netForce} N</Text>
+          <Text style={styles.resultText}>Weight: {item.weight} N</Text>
+          <Text style={styles.resultText}>Drag force: {item.dragForce} N</Text>
+          <Text style={styles.resultText}>G-force: {item.gForce} g</Text>
+        </View>
+
+        <View style={styles.infoBlock}>
+          <Text style={styles.label}>Reflection</Text>
+          <Text style={styles.value}>
+            {item.reflection || "No reflection added"}
+          </Text>
+        </View>
+
+        {item.mediaUri ? (
+          <View style={styles.videoBlock}>
+            <Text style={styles.label}>Recorded Drop Video</Text>
+            <SavedVideo uri={item.mediaUri} />
+          </View>
+        ) : null}
+      </>
+    );
+  };
+
+  const renderReactionResult = (item: ActivityResult) => {
+    return (
+      <>
+        <View style={styles.infoBlock}>
+          <Text style={styles.label}>Hand Used</Text>
+          <Text style={styles.value}>{item.design || "Not entered"}</Text>
+        </View>
+
+        <View style={styles.infoBlock}>
+          <Text style={styles.label}>Prediction</Text>
+          <Text style={styles.value}>{item.prediction || "Not entered"}</Text>
+        </View>
+
+        <View style={styles.highlightBox}>
+          <Text style={styles.highlightLabel}>Reaction Time</Text>
+          <Text style={styles.highlightValue}>
+            {item.dropTime || "Not recorded"}
+          </Text>
+        </View>
+
+        <View style={styles.infoBlock}>
+          <Text style={styles.label}>Reflection</Text>
+          <Text style={styles.value}>
+            {item.reflection || "No reflection added"}
+          </Text>
+        </View>
+      </>
+    );
+  };
+
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <Text style={styles.title}>Activity History</Text>
@@ -81,8 +175,7 @@ export default function HistoryScreen() {
         <View style={styles.emptyCard}>
           <Text style={styles.emptyTitle}>No activity records yet.</Text>
           <Text style={styles.emptyText}>
-            Start an activity, enter your result, record a video if needed, and
-            save it to view it here.
+            Start an activity, enter your result, and save it to view it here.
           </Text>
         </View>
       ) : (
@@ -92,71 +185,9 @@ export default function HistoryScreen() {
             <Text style={styles.activityTitle}>{item.activityTitle}</Text>
             <Text style={styles.date}>{item.createdAt}</Text>
 
-            <View style={styles.infoBlock}>
-              <Text style={styles.label}>Design</Text>
-              <Text style={styles.value}>{item.design || "Not entered"}</Text>
-            </View>
-
-            <View style={styles.infoBlock}>
-              <Text style={styles.label}>Prediction</Text>
-              <Text style={styles.value}>
-                {item.prediction || "Not entered"}
-              </Text>
-            </View>
-
-            <View style={styles.row}>
-              <Text style={styles.label}>Height</Text>
-              <Text style={styles.value}>{item.height || "N/A"} m</Text>
-            </View>
-
-            <View style={styles.row}>
-              <Text style={styles.label}>Mass</Text>
-              <Text style={styles.value}>{item.mass || "N/A"} kg</Text>
-            </View>
-
-            <View style={styles.row}>
-              <Text style={styles.label}>Drop Time</Text>
-              <Text style={styles.value}>{item.dropTime || "N/A"} sec</Text>
-            </View>
-
-            <View style={styles.row}>
-              <Text style={styles.label}>Stop Time</Text>
-              <Text style={styles.value}>{item.stopTime || "N/A"} sec</Text>
-            </View>
-
-            <View style={styles.resultBox}>
-              <Text style={styles.resultTitle}>Calculated Results</Text>
-              <Text style={styles.resultText}>
-                Final velocity: {item.finalVelocity} m/s
-              </Text>
-              <Text style={styles.resultText}>
-                Acceleration: {item.acceleration} m/s²
-              </Text>
-              <Text style={styles.resultText}>
-                Net force: {item.netForce} N
-              </Text>
-              <Text style={styles.resultText}>Weight: {item.weight} N</Text>
-              <Text style={styles.resultText}>
-                Drag force: {item.dragForce} N
-              </Text>
-              <Text style={styles.resultText}>G-force: {item.gForce} g</Text>
-            </View>
-
-            <View style={styles.infoBlock}>
-              <Text style={styles.label}>Reflection</Text>
-              <Text style={styles.value}>
-                {item.reflection || "No reflection added"}
-              </Text>
-            </View>
-
-            {item.mediaUri ? (
-              <View style={styles.videoBlock}>
-                <Text style={styles.label}>Recorded Drop Video</Text>
-                <SavedVideo uri={item.mediaUri} />
-              </View>
-            ) : (
-              <Text style={styles.noVideo}>No video attached.</Text>
-            )}
+            {item.activityId === "reaction"
+              ? renderReactionResult(item)
+              : renderParachuteResult(item)}
           </View>
         ))
       )}
@@ -281,6 +312,24 @@ const styles = StyleSheet.create({
     fontSize: 15,
     marginBottom: 4,
   },
+  highlightBox: {
+    backgroundColor: "#22C55E",
+    padding: 18,
+    borderRadius: 16,
+    marginBottom: 10,
+    alignItems: "center",
+  },
+  highlightLabel: {
+    color: "#DCFCE7",
+    fontSize: 14,
+    fontWeight: "600",
+    marginBottom: 4,
+  },
+  highlightValue: {
+    color: "#FFFFFF",
+    fontSize: 30,
+    fontWeight: "bold",
+  },
   videoBlock: {
     backgroundColor: "#334155",
     padding: 14,
@@ -293,10 +342,5 @@ const styles = StyleSheet.create({
     borderRadius: 14,
     marginTop: 10,
     backgroundColor: "#000000",
-  },
-  noVideo: {
-    color: "#94A3B8",
-    fontSize: 14,
-    marginTop: 8,
   },
 });

@@ -70,6 +70,7 @@ export const stemmActivities: STEMMActivity[] = [
     id: "reaction",
     title: "Reaction Board Challenge",
     area: "Neuroscience + Mathematics",
+    screenName: "ReactionBoard",
     overview:
       "Measure reaction time and compare performance using dominant and non-dominant hands.",
     equipment: ["Mobile phone"],

@@ -45,12 +45,12 @@ export const stemmActivities: STEMMActivity[] = [
     instructions: [
       "Choose three classroom actions.",
       "Predict which action will be loudest.",
-      "Record the sound result.",
+      "Record the sound result and classroom location.",
       "Compare loud and quiet zones.",
       "Reflect on hearing safety.",
     ],
     sensorUse:
-      "Manual dB recording, location notes, hearing risk summary, and results history.",
+      "Manual dB recording, location notes, loud/quiet zone mapping, hearing risk summary, and results history.",
   },
   {
     id: "human-performance",
@@ -106,6 +106,7 @@ export const stemmActivities: STEMMActivity[] = [
     id: "earthquake",
     title: "Earthquake-Resistant Structure",
     area: "Engineering + Earth Science",
+    screenName: "EarthquakeStructure",
     overview:
       "Build a structure that reduces phone movement during simulated vibration.",
     equipment: ["Phone", "Cardboard", "Paper", "Tape", "Cups"],
@@ -116,6 +117,7 @@ export const stemmActivities: STEMMActivity[] = [
       "Modify the structure.",
       "Compare movement results.",
     ],
-    sensorUse: "Accelerometer, gyroscope, vibration/movement analytics.",
+    sensorUse:
+      "Accelerometer vibration test, movement score, stability rating, and results history.",
   },
 ];

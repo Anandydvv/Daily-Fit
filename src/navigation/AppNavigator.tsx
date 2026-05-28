@@ -16,6 +16,7 @@ import SignupScreen from "../screens/SignupScreen";
 import TeamSetupScreen from "../screens/TeamSetupScreen";
 
 import BreathingTrainerScreen from "../screens/activities/BreathingTrainerScreen";
+import EarthquakeStructureScreen from "../screens/activities/EarthquakeStructureScreen";
 import ParachuteDropScreen from "../screens/activities/ParachuteDropScreen";
 import ReactionBoardScreen from "../screens/activities/ReactionBoardScreen";
 import SoundPollutionScreen from "../screens/activities/SoundPollutionScreen";
@@ -94,6 +95,19 @@ export default function AppNavigator() {
         component={SoundPollutionScreen}
         options={{
           title: "Sound Pollution",
+          headerStyle: { backgroundColor: "#0F172A" },
+          headerTintColor: "#FFFFFF",
+          headerTitleStyle: {
+            fontWeight: "bold",
+          },
+        }}
+      />
+
+      <Stack.Screen
+        name="EarthquakeStructure"
+        component={EarthquakeStructureScreen}
+        options={{
+          title: "Earthquake Structure",
           headerStyle: { backgroundColor: "#0F172A" },
           headerTintColor: "#FFFFFF",
           headerTitleStyle: {

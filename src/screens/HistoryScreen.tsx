@@ -179,6 +179,53 @@ export default function HistoryScreen() {
     );
   };
 
+  const renderEarthquakeResult = (item: ActivityResult) => {
+    return (
+      <>
+        <View style={styles.infoBlock}>
+          <Text style={styles.label}>Structure Design</Text>
+          <Text style={styles.value}>{item.design || "Not entered"}</Text>
+        </View>
+
+        <View style={styles.infoBlock}>
+          <Text style={styles.label}>Prediction</Text>
+          <Text style={styles.value}>{item.prediction || "Not entered"}</Text>
+        </View>
+
+        <View style={styles.row}>
+          <Text style={styles.label}>Average Movement</Text>
+          <Text style={styles.rowValue}>{item.dropTime || "Not recorded"}</Text>
+        </View>
+
+        <View style={styles.row}>
+          <Text style={styles.label}>Maximum Movement</Text>
+          <Text style={styles.rowValue}>{item.stopTime || "Not recorded"}</Text>
+        </View>
+
+        <View style={styles.highlightBox}>
+          <Text style={styles.highlightLabel}>Stability Rating</Text>
+          <Text style={styles.highlightValue}>
+            {item.finalVelocity || "Not calculated"}
+          </Text>
+        </View>
+
+        <View style={styles.infoBlock}>
+          <Text style={styles.label}>Sensor Method</Text>
+          <Text style={styles.value}>
+            {item.acceleration || "Not recorded"}
+          </Text>
+        </View>
+
+        <View style={styles.infoBlock}>
+          <Text style={styles.label}>Reflection</Text>
+          <Text style={styles.value}>
+            {item.reflection || "No reflection added"}
+          </Text>
+        </View>
+      </>
+    );
+  };
+
   const renderReactionResult = (item: ActivityResult) => {
     return (
       <>
@@ -254,6 +301,10 @@ export default function HistoryScreen() {
   const renderResultDetails = (item: ActivityResult) => {
     if (item.activityId === "sound") {
       return renderSoundResult(item);
+    }
+
+    if (item.activityId === "earthquake") {
+      return renderEarthquakeResult(item);
     }
 
     if (item.activityId === "reaction") {

@@ -38,6 +38,7 @@ export const stemmActivities: STEMMActivity[] = [
     id: "sound",
     title: "Sound Pollution Hunter",
     area: "Environmental Science",
+    screenName: "SoundPollution",
     overview:
       "Measure and compare sound levels from classroom actions such as talking, walking, stamping, or dropping objects.",
     equipment: ["Mobile phone", "Classroom space"],
@@ -48,7 +49,8 @@ export const stemmActivities: STEMMActivity[] = [
       "Compare loud and quiet zones.",
       "Reflect on hearing safety.",
     ],
-    sensorUse: "Microphone concept, GPS tagging, results and comments.",
+    sensorUse:
+      "Manual dB recording, location notes, hearing risk summary, and results history.",
   },
   {
     id: "human-performance",

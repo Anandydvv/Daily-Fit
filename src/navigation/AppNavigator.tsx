@@ -18,6 +18,7 @@ import TeamSetupScreen from "../screens/TeamSetupScreen";
 import BreathingTrainerScreen from "../screens/activities/BreathingTrainerScreen";
 import ParachuteDropScreen from "../screens/activities/ParachuteDropScreen";
 import ReactionBoardScreen from "../screens/activities/ReactionBoardScreen";
+import SoundPollutionScreen from "../screens/activities/SoundPollutionScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -80,6 +81,19 @@ export default function AppNavigator() {
         component={ParachuteDropScreen}
         options={{
           title: "Parachute Drop",
+          headerStyle: { backgroundColor: "#0F172A" },
+          headerTintColor: "#FFFFFF",
+          headerTitleStyle: {
+            fontWeight: "bold",
+          },
+        }}
+      />
+
+      <Stack.Screen
+        name="SoundPollution"
+        component={SoundPollutionScreen}
+        options={{
+          title: "Sound Pollution",
           headerStyle: { backgroundColor: "#0F172A" },
           headerTintColor: "#FFFFFF",
           headerTitleStyle: {

@@ -81,22 +81,22 @@ export default function HistoryScreen() {
 
         <View style={styles.row}>
           <Text style={styles.label}>Height</Text>
-          <Text style={styles.value}>{item.height || "N/A"} m</Text>
+          <Text style={styles.rowValue}>{item.height || "N/A"} m</Text>
         </View>
 
         <View style={styles.row}>
           <Text style={styles.label}>Mass</Text>
-          <Text style={styles.value}>{item.mass || "N/A"} kg</Text>
+          <Text style={styles.rowValue}>{item.mass || "N/A"} kg</Text>
         </View>
 
         <View style={styles.row}>
           <Text style={styles.label}>Drop Time</Text>
-          <Text style={styles.value}>{item.dropTime || "N/A"} sec</Text>
+          <Text style={styles.rowValue}>{item.dropTime || "N/A"} sec</Text>
         </View>
 
         <View style={styles.row}>
           <Text style={styles.label}>Stop Time</Text>
-          <Text style={styles.value}>{item.stopTime || "N/A"} sec</Text>
+          <Text style={styles.rowValue}>{item.stopTime || "N/A"} sec</Text>
         </View>
 
         <View style={styles.resultBox}>
@@ -126,6 +126,55 @@ export default function HistoryScreen() {
             <SavedVideo uri={item.mediaUri} />
           </View>
         ) : null}
+      </>
+    );
+  };
+
+  const renderSoundResult = (item: ActivityResult) => {
+    return (
+      <>
+        <View style={styles.infoBlock}>
+          <Text style={styles.label}>Loud / Quiet Zone Summary</Text>
+          <Text style={styles.value}>{item.design || "Not entered"}</Text>
+        </View>
+
+        <View style={styles.infoBlock}>
+          <Text style={styles.label}>Predicted Loudest Action</Text>
+          <Text style={styles.value}>{item.prediction || "Not entered"}</Text>
+        </View>
+
+        <View style={styles.infoBlock}>
+          <Text style={styles.label}>Recorded Actions and Locations</Text>
+          <Text style={styles.value}>{item.dropTime || "Not recorded"}</Text>
+        </View>
+
+        <View style={styles.highlightBox}>
+          <Text style={styles.highlightLabel}>Loudest Sound / Risk</Text>
+          <Text style={styles.highlightValue}>
+            {item.stopTime || "Not calculated"}
+          </Text>
+        </View>
+
+        <View style={styles.infoBlock}>
+          <Text style={styles.label}>Ear Muffs Needed?</Text>
+          <Text style={styles.value}>
+            {item.finalVelocity || "Not answered"}
+          </Text>
+        </View>
+
+        <View style={styles.infoBlock}>
+          <Text style={styles.label}>Sound Zone Method</Text>
+          <Text style={styles.value}>
+            {item.acceleration || "Not recorded"}
+          </Text>
+        </View>
+
+        <View style={styles.infoBlock}>
+          <Text style={styles.label}>Reflection</Text>
+          <Text style={styles.value}>
+            {item.reflection || "No reflection added"}
+          </Text>
+        </View>
       </>
     );
   };
@@ -170,17 +219,17 @@ export default function HistoryScreen() {
 
         <View style={styles.row}>
           <Text style={styles.label}>Breathing at Rest</Text>
-          <Text style={styles.value}>{item.dropTime || "Not recorded"}</Text>
+          <Text style={styles.rowValue}>{item.dropTime || "Not recorded"}</Text>
         </View>
 
         <View style={styles.row}>
           <Text style={styles.label}>After Jogging</Text>
-          <Text style={styles.value}>{item.stopTime || "Not recorded"}</Text>
+          <Text style={styles.rowValue}>{item.stopTime || "Not recorded"}</Text>
         </View>
 
         <View style={styles.row}>
           <Text style={styles.label}>After Star Jumps</Text>
-          <Text style={styles.value}>
+          <Text style={styles.rowValue}>
             {item.finalVelocity || "Not recorded"}
           </Text>
         </View>
@@ -203,6 +252,10 @@ export default function HistoryScreen() {
   };
 
   const renderResultDetails = (item: ActivityResult) => {
+    if (item.activityId === "sound") {
+      return renderSoundResult(item);
+    }
+
     if (item.activityId === "reaction") {
       return renderReactionResult(item);
     }
@@ -347,6 +400,11 @@ const styles = StyleSheet.create({
     color: "#FFFFFF",
     fontSize: 15,
     lineHeight: 22,
+  },
+  rowValue: {
+    color: "#FFFFFF",
+    fontSize: 15,
+    lineHeight: 22,
     flexShrink: 1,
     textAlign: "right",
   },
@@ -382,7 +440,7 @@ const styles = StyleSheet.create({
   },
   highlightValue: {
     color: "#FFFFFF",
-    fontSize: 26,
+    fontSize: 22,
     fontWeight: "bold",
     textAlign: "center",
   },

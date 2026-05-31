@@ -19,11 +19,15 @@ export default function ProfileScreen() {
   return (
     <View style={styles.container}>
       <View style={styles.profileCard}>
-        <Text style={styles.avatar}>👤</Text>
+        <Text style={styles.avatar}>🧪</Text>
 
-        <Text style={styles.name}>{user?.displayName || "DailyFit User"}</Text>
+        <Text style={styles.name}>
+          {user?.displayName || "STEMM Lab User"}
+        </Text>
 
-        <Text style={styles.email}>{user?.email || "No email found"}</Text>
+        <Text style={styles.email}>
+          {user?.email || "No email found"}
+        </Text>
 
         <View style={styles.infoBox}>
           <Text style={styles.infoTitle}>Account Status</Text>
@@ -31,8 +35,15 @@ export default function ProfileScreen() {
         </View>
 
         <View style={styles.infoBox}>
-          <Text style={styles.infoTitle}>Fitness Goal</Text>
-          <Text style={styles.infoValue}>Stay active daily</Text>
+          <Text style={styles.infoTitle}>Learning Focus</Text>
+          <Text style={styles.infoValue}>
+            Learn through STEMM activities
+          </Text>
+        </View>
+
+        <View style={styles.infoBox}>
+          <Text style={styles.infoTitle}>Current Role</Text>
+          <Text style={styles.infoValue}>STEMM Explorer</Text>
         </View>
 
         <TouchableOpacity style={styles.logoutButton} onPress={logoutUser}>
@@ -72,6 +83,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: "#2A2A2A",
     marginBottom: 6,
+    textAlign: "center",
   },
 
   email: {

@@ -44,8 +44,8 @@ export default function ReminderScreen() {
     }
 
     if (Platform.OS === "android") {
-      await Notifications.setNotificationChannelAsync("workout-reminders", {
-        name: "Workout Reminders",
+      await Notifications.setNotificationChannelAsync("stemm-reminders", {
+        name: "STEMM Activity Reminders",
         importance: Notifications.AndroidImportance.HIGH,
         sound: "default",
       });
@@ -89,7 +89,6 @@ export default function ReminderScreen() {
     }
 
     const now = new Date();
-
     const reminderDate = new Date();
 
     reminderDate.setHours(reminderHour);
@@ -102,19 +101,18 @@ export default function ReminderScreen() {
     }
 
     const formattedTime = `${String(reminderHour).padStart(2, "0")}:${String(
-      reminderMinute,
+      reminderMinute
     ).padStart(2, "0")}`;
 
     await Notifications.scheduleNotificationAsync({
       content: {
-        title: "🏋️ DailyFit Reminder",
-        body: "Time to complete your daily fitness goal!",
+        title: "🧪 STEMM Lab Reminder",
+        body: "Time to complete your STEMM activity challenge!",
         sound: true,
         data: {
           time: formattedTime,
         },
       },
-
       trigger: {
         type: Notifications.SchedulableTriggerInputTypes.DATE,
         date: reminderDate,
@@ -126,12 +124,11 @@ export default function ReminderScreen() {
 
     await loadReminders();
 
-    Alert.alert("Reminder Set", `Reminder scheduled for ${formattedTime}`);
+    Alert.alert("Reminder Set", `STEMM activity reminder scheduled for ${formattedTime}`);
   };
 
   const cancelReminder = async (id: string) => {
     await Notifications.cancelScheduledNotificationAsync(id);
-
     await loadReminders();
 
     Alert.alert("Cancelled", "Reminder removed successfully.");
@@ -139,7 +136,6 @@ export default function ReminderScreen() {
 
   const cancelAllReminders = async () => {
     await Notifications.cancelAllScheduledNotificationsAsync();
-
     await loadReminders();
 
     Alert.alert("All Cancelled", "All reminders removed.");
@@ -147,9 +143,11 @@ export default function ReminderScreen() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Workout Reminder</Text>
+      <Text style={styles.title}>STEMM Activity Reminder</Text>
 
-      <Text style={styles.subtitle}>Set your workout reminder manually</Text>
+      <Text style={styles.subtitle}>
+        Set reminders for your STEMM learning activities
+      </Text>
 
       <View style={styles.inputRow}>
         <TextInput
@@ -181,7 +179,7 @@ export default function ReminderScreen() {
         <Text style={styles.buttonText}>Set Reminder</Text>
       </TouchableOpacity>
 
-      <Text style={styles.sectionTitle}>Your Reminders</Text>
+      <Text style={styles.sectionTitle}>Your STEMM Reminders</Text>
 
       {reminders.length === 0 ? (
         <Text style={styles.emptyText}>No reminders set yet.</Text>
@@ -192,8 +190,7 @@ export default function ReminderScreen() {
           renderItem={({ item }) => (
             <View style={styles.reminderCard}>
               <View>
-                <Text style={styles.reminderTitle}>Daily Workout</Text>
-
+                <Text style={styles.reminderTitle}>STEMM Activity</Text>
                 <Text style={styles.reminderTime}>{item.time}</Text>
               </View>
 

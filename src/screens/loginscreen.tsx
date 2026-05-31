@@ -1,11 +1,7 @@
 import { useNavigation } from "@react-navigation/native";
-import {
-  sendPasswordResetEmail,
-  signInWithEmailAndPassword,
-} from "firebase/auth";
+import { signInWithEmailAndPassword } from "firebase/auth";
 import { useState } from "react";
 import {
-  ActivityIndicator,
   Alert,
   KeyboardAvoidingView,
   Platform,
@@ -16,115 +12,98 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-
 import { auth } from "../firebaseConfig";
 
 export default function LoginScreen() {
   const navigation = useNavigation<any>();
 
+  const [name, setName] = useState("");
+  const [teamName, setTeamName] = useState("");
+  const [grade, setGrade] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
 
   const loginUser = async () => {
-    if (!email || !password) {
-      Alert.alert("Missing Details", "Please enter email and password.");
+    if (!name || !teamName || !grade || !email || !password) {
+      Alert.alert("Missing Details", "Please fill in all fields.");
       return;
     }
 
     try {
-      setLoading(true);
-
       await signInWithEmailAndPassword(auth, email.trim(), password);
-
-      navigation.replace("Dashboard");
+      navigation.replace("Home");
     } catch (error: any) {
       Alert.alert("Login Failed", error.message);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const resetPassword = async () => {
-    if (!email) {
-      Alert.alert("Enter Email", "Please enter your email first.");
-      return;
-    }
-
-    try {
-      await sendPasswordResetEmail(auth, email.trim());
-
-      Alert.alert("Password Reset", "Reset email sent successfully.");
-    } catch (error: any) {
-      Alert.alert("Error", error.message);
     }
   };
 
   return (
     <KeyboardAvoidingView
-      style={styles.keyboardView}
+      style={styles.container}
       behavior={Platform.OS === "ios" ? "padding" : undefined}
     >
-      <ScrollView
-        contentContainerStyle={styles.container}
-        keyboardShouldPersistTaps="handled"
-      >
-        <View style={styles.logoBox}>
-          <Text style={styles.logoText}>DailyFit</Text>
-        </View>
+      <ScrollView contentContainerStyle={styles.scrollContent}>
+        <Text style={styles.logo}>🧪</Text>
 
-        <Text style={styles.tagline}>Stay Active. Stay Healthy. Stay You.</Text>
+        <Text style={styles.title}>STEMM Lab</Text>
 
-        <View style={styles.illustrationBox}>
-          <Text style={styles.character}>🏃‍♂️</Text>
-          <Text style={styles.healthIcon}>💚</Text>
-          <Text style={styles.healthText}>Healthy habits start today</Text>
-        </View>
+        <Text style={styles.subtitle}>
+          Explore science through real-world STEMM challenges
+        </Text>
 
-        <View style={styles.loginCard}>
-          <Text style={styles.cardTitle}>Let’s begin your</Text>
+        <View style={styles.card}>
+          <Text style={styles.cardTitle}>Student Login</Text>
 
-          <Text style={styles.cardTitleGreen}>health journey ♡</Text>
+          <TextInput
+            placeholder="Name"
+            placeholderTextColor="#888"
+            value={name}
+            onChangeText={setName}
+            style={styles.input}
+          />
+
+          <TextInput
+            placeholder="Team Name"
+            placeholderTextColor="#888"
+            value={teamName}
+            onChangeText={setTeamName}
+            style={styles.input}
+          />
+
+          <TextInput
+            placeholder="Grade"
+            placeholderTextColor="#888"
+            value={grade}
+            onChangeText={setGrade}
+            style={styles.input}
+          />
 
           <TextInput
             placeholder="Email"
-            placeholderTextColor="#9E9E9E"
-            keyboardType="email-address"
-            autoCapitalize="none"
-            style={styles.input}
+            placeholderTextColor="#888"
             value={email}
             onChangeText={setEmail}
+            style={styles.input}
+            keyboardType="email-address"
+            autoCapitalize="none"
           />
 
           <TextInput
             placeholder="Password"
-            placeholderTextColor="#9E9E9E"
-            secureTextEntry
-            style={styles.input}
+            placeholderTextColor="#888"
             value={password}
             onChangeText={setPassword}
+            style={styles.input}
+            secureTextEntry
           />
 
-          <TouchableOpacity onPress={resetPassword}>
-            <Text style={styles.forgotText}>Forgot Password?</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={styles.button}
-            onPress={loginUser}
-            disabled={loading}
-          >
-            {loading ? (
-              <ActivityIndicator color="#fff" />
-            ) : (
-              <Text style={styles.buttonText}>Go for it →</Text>
-            )}
+          <TouchableOpacity style={styles.loginButton} onPress={loginUser}>
+            <Text style={styles.loginText}>Login</Text>
           </TouchableOpacity>
 
           <TouchableOpacity onPress={() => navigation.navigate("Signup")}>
             <Text style={styles.signupText}>
-              Don’t have an account?{" "}
-              <Text style={styles.signupGreen}>Sign up</Text>
+              Don’t have an account? Register
             </Text>
           </TouchableOpacity>
         </View>
@@ -134,136 +113,84 @@ export default function LoginScreen() {
 }
 
 const styles = StyleSheet.create({
-  keyboardView: {
+  container: {
     flex: 1,
     backgroundColor: "#EEF8EC",
   },
 
-  container: {
+  scrollContent: {
     flexGrow: 1,
-    backgroundColor: "#EEF8EC",
-    padding: 18,
-    paddingBottom: 60,
-    alignItems: "center",
     justifyContent: "center",
+    padding: 24,
   },
 
-  logoBox: {
-    width: "92%",
-    paddingVertical: 16,
-    borderRadius: 24,
-    borderWidth: 1.5,
-    borderColor: "#7EA66A",
-    backgroundColor: "rgba(255,255,255,0.6)",
-    alignItems: "center",
-  },
-
-  logoText: {
-    fontSize: 42,
-    fontWeight: "bold",
-    color: "#416D32",
-  },
-
-  tagline: {
-    marginTop: 12,
-    fontSize: 15,
-    color: "#3F3F3F",
-    fontWeight: "600",
+  logo: {
+    fontSize: 64,
     textAlign: "center",
+    marginBottom: 8,
   },
 
-  illustrationBox: {
-    width: "100%",
-    height: 150,
+  title: {
+    fontSize: 38,
+    fontWeight: "bold",
+    textAlign: "center",
+    color: "#2E7D32",
+  },
+
+  subtitle: {
+    fontSize: 15,
+    textAlign: "center",
+    color: "#555",
     marginTop: 8,
-    borderRadius: 28,
-    alignItems: "center",
-    justifyContent: "center",
+    marginBottom: 28,
   },
 
-  character: {
-    fontSize: 74,
-  },
-
-  healthIcon: {
-    fontSize: 26,
-    marginTop: -8,
-  },
-
-  healthText: {
-    fontSize: 14,
-    color: "#4F7D3A",
-    fontWeight: "700",
-    marginTop: 4,
-  },
-
-  loginCard: {
-    width: "100%",
-    backgroundColor: "#FFFFFF",
-    borderRadius: 30,
-    padding: 20,
-    marginTop: 4,
+  card: {
+    backgroundColor: "#fff",
+    borderRadius: 26,
+    padding: 22,
     shadowColor: "#000",
     shadowOpacity: 0.12,
-    shadowRadius: 18,
+    shadowRadius: 16,
     elevation: 7,
   },
 
   cardTitle: {
-    fontSize: 24,
+    fontSize: 26,
     fontWeight: "bold",
-    textAlign: "center",
     color: "#2A2A2A",
-  },
-
-  cardTitleGreen: {
-    fontSize: 24,
-    fontWeight: "bold",
     textAlign: "center",
-    color: "#5C8F45",
-    marginBottom: 18,
+    marginBottom: 20,
   },
 
   input: {
-    backgroundColor: "#FBFCFA",
-    borderWidth: 1,
-    borderColor: "#DDE8D8",
-    borderRadius: 16,
+    backgroundColor: "#F5F7FA",
+    borderRadius: 14,
     padding: 15,
-    marginBottom: 12,
     fontSize: 16,
+    marginBottom: 13,
+    color: "#111",
   },
 
-  forgotText: {
-    color: "#4F7D3A",
-    textAlign: "right",
-    fontSize: 14,
-    marginBottom: 14,
-    fontWeight: "600",
-  },
-
-  button: {
+  loginButton: {
     backgroundColor: "#4F7D3A",
     padding: 16,
-    borderRadius: 16,
+    borderRadius: 14,
+    marginTop: 8,
   },
 
-  buttonText: {
-    color: "#FFFFFF",
+  loginText: {
+    color: "#fff",
     textAlign: "center",
     fontSize: 18,
     fontWeight: "bold",
   },
 
   signupText: {
+    marginTop: 18,
     textAlign: "center",
+    color: "#2E7D32",
     fontSize: 15,
-    color: "#333",
-    marginTop: 16,
-  },
-
-  signupGreen: {
-    color: "#4F7D3A",
-    fontWeight: "bold",
+    fontWeight: "600",
   },
 });

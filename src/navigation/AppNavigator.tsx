@@ -10,7 +10,7 @@ import GoalsScreen from "../screens/GoalsScreen";
 import GyroscopeScreen from "../screens/GyroscopeScreen";
 import HistoryScreen from "../screens/HistoryScreen";
 import LocationScreen from "../screens/LocationScreen";
-import LoginScreen from "../screens/loginscreen";
+import LoginScreen from "../screens/LoginScreen";
 import ProfileScreen from "../screens/ProfileScreen";
 import ProgressScreen from "../screens/ProgressScreen";
 import ReminderScreen from "../screens/ReminderScreen";

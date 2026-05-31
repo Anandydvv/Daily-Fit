@@ -21,13 +21,9 @@ export default function ProfileScreen() {
       <View style={styles.profileCard}>
         <Text style={styles.avatar}>🧪</Text>
 
-        <Text style={styles.name}>
-          {user?.displayName || "STEMM Lab User"}
-        </Text>
+        <Text style={styles.name}>{user?.displayName || "STEMM Lab User"}</Text>
 
-        <Text style={styles.email}>
-          {user?.email || "No email found"}
-        </Text>
+        <Text style={styles.email}>{user?.email || "No email found"}</Text>
 
         <View style={styles.infoBox}>
           <Text style={styles.infoTitle}>Account Status</Text>
@@ -36,9 +32,7 @@ export default function ProfileScreen() {
 
         <View style={styles.infoBox}>
           <Text style={styles.infoTitle}>Learning Focus</Text>
-          <Text style={styles.infoValue}>
-            Learn through STEMM activities
-          </Text>
+          <Text style={styles.infoValue}>Learn through STEMM activities</Text>
         </View>
 
         <View style={styles.infoBox}>

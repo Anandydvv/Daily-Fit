@@ -88,15 +88,13 @@ export default function ReminderScreen() {
       return;
     }
 
-    const now = new Date();
     const reminderDate = new Date();
-
     reminderDate.setHours(reminderHour);
     reminderDate.setMinutes(reminderMinute);
     reminderDate.setSeconds(0);
     reminderDate.setMilliseconds(0);
 
-    if (reminderDate <= now) {
+    if (reminderDate <= new Date()) {
       reminderDate.setDate(reminderDate.getDate() + 1);
     }
 
@@ -124,7 +122,10 @@ export default function ReminderScreen() {
 
     await loadReminders();
 
-    Alert.alert("Reminder Set", `STEMM activity reminder scheduled for ${formattedTime}`);
+    Alert.alert(
+      "Reminder Set",
+      `STEMM activity reminder scheduled for ${formattedTime}`
+    );
   };
 
   const cancelReminder = async (id: string) => {

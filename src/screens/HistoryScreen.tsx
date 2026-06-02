@@ -226,6 +226,55 @@ export default function HistoryScreen() {
     );
   };
 
+  const renderHumanPerformanceResult = (item: ActivityResult) => {
+    return (
+      <>
+        <View style={styles.infoBlock}>
+          <Text style={styles.label}>Best Performance</Text>
+          <Text style={styles.value}>{item.design || "Not entered"}</Text>
+        </View>
+
+        <View style={styles.infoBlock}>
+          <Text style={styles.label}>Prediction</Text>
+          <Text style={styles.value}>{item.prediction || "Not entered"}</Text>
+        </View>
+
+        <View style={styles.infoBlock}>
+          <Text style={styles.label}>Movement Attempts</Text>
+          <Text style={styles.value}>{item.dropTime || "Not recorded"}</Text>
+        </View>
+
+        <View style={styles.row}>
+          <Text style={styles.label}>Best Smoothness</Text>
+          <Text style={styles.rowValue}>
+            {item.stopTime || "Not calculated"}
+          </Text>
+        </View>
+
+        <View style={styles.highlightBox}>
+          <Text style={styles.highlightLabel}>Coordination Rating</Text>
+          <Text style={styles.highlightValue}>
+            {item.finalVelocity || "Not calculated"}
+          </Text>
+        </View>
+
+        <View style={styles.infoBlock}>
+          <Text style={styles.label}>Sensor Method</Text>
+          <Text style={styles.value}>
+            {item.acceleration || "Not recorded"}
+          </Text>
+        </View>
+
+        <View style={styles.infoBlock}>
+          <Text style={styles.label}>Reflection</Text>
+          <Text style={styles.value}>
+            {item.reflection || "No reflection added"}
+          </Text>
+        </View>
+      </>
+    );
+  };
+
   const renderReactionResult = (item: ActivityResult) => {
     return (
       <>
@@ -305,6 +354,10 @@ export default function HistoryScreen() {
 
     if (item.activityId === "earthquake") {
       return renderEarthquakeResult(item);
+    }
+
+    if (item.activityId === "human-performance") {
+      return renderHumanPerformanceResult(item);
     }
 
     if (item.activityId === "reaction") {

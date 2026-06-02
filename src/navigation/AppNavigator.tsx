@@ -10,7 +10,7 @@ import GoalsScreen from "../screens/GoalsScreen";
 import GyroscopeScreen from "../screens/GyroscopeScreen";
 import HistoryScreen from "../screens/HistoryScreen";
 import LocationScreen from "../screens/LocationScreen";
-import LoginScreen from "../screens/LoginScreen";
+import LoginScreen from "../screens/loginscreen";
 import ProfileScreen from "../screens/ProfileScreen";
 import ProgressScreen from "../screens/ProgressScreen";
 import ReminderScreen from "../screens/ReminderScreen";
@@ -19,6 +19,7 @@ import TeamSetupScreen from "../screens/TeamSetupScreen";
 
 import BreathingTrainerScreen from "../screens/activities/BreathingTrainerScreen";
 import EarthquakeStructureScreen from "../screens/activities/EarthquakeStructureScreen";
+import HumanPerformanceScreen from "../screens/activities/HumanPerformanceScreen";
 import ParachuteDropScreen from "../screens/activities/ParachuteDropScreen";
 import ReactionBoardScreen from "../screens/activities/ReactionBoardScreen";
 import SoundPollutionScreen from "../screens/activities/SoundPollutionScreen";
@@ -121,6 +122,14 @@ export default function AppNavigator() {
       />
 
       <Stack.Screen
+        name="HumanPerformance"
+        component={HumanPerformanceScreen}
+        options={({ navigation }) =>
+          challengesBackOptions(navigation, "Human Performance")
+        }
+      />
+
+      <Stack.Screen
         name="ReactionBoard"
         component={ReactionBoardScreen}
         options={({ navigation }) =>
@@ -139,9 +148,7 @@ export default function AppNavigator() {
       <Stack.Screen
         name="Login"
         component={LoginScreen}
-        options={({ navigation }) =>
-          dashboardBackOptions(navigation, "Login")
-        }
+        options={({ navigation }) => dashboardBackOptions(navigation, "Login")}
       />
 
       <Stack.Screen

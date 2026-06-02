@@ -56,6 +56,7 @@ export const stemmActivities: STEMMActivity[] = [
     id: "human-performance",
     title: "Human Performance Lab",
     area: "Medical Science + Biomechanics",
+    screenName: "HumanPerformance",
     overview:
       "Measure body movement, smoothness, and coordination during stretching or physical movement challenges.",
     equipment: ["Mobile phone", "Open safe movement space"],
@@ -66,7 +67,8 @@ export const stemmActivities: STEMMActivity[] = [
       "Review sensor values.",
       "Compare attempts.",
     ],
-    sensorUse: "Accelerometer, gyroscope, timer, progress analytics.",
+    sensorUse:
+      "Accelerometer, gyroscope, movement timer, smoothness score, coordination rating, and results history.",
   },
   {
     id: "reaction",

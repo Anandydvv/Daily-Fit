@@ -160,22 +160,6 @@ export default function AppNavigator() {
       />
 
       <Stack.Screen
-        name="Login"
-        component={LoginScreen}
-        options={({ navigation }) =>
-          dashboardBackOptions(navigation, "Login")
-        }
-      />
-
-      <Stack.Screen
-        name="Signup"
-        component={SignupScreen}
-        options={({ navigation }) =>
-          dashboardBackOptions(navigation, "Sign Up")
-        }
-      />
-
-      <Stack.Screen
         name="Goals"
         component={GoalsScreen}
         options={({ navigation }) =>

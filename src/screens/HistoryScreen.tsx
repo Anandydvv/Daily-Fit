@@ -179,6 +179,55 @@ export default function HistoryScreen() {
     );
   };
 
+  const renderHandFanResult = (item: ActivityResult) => {
+    return (
+      <>
+        <View style={styles.infoBlock}>
+          <Text style={styles.label}>Most Movement</Text>
+          <Text style={styles.value}>{item.design || "Not entered"}</Text>
+        </View>
+
+        <View style={styles.infoBlock}>
+          <Text style={styles.label}>Prediction</Text>
+          <Text style={styles.value}>{item.prediction || "Not entered"}</Text>
+        </View>
+
+        <View style={styles.infoBlock}>
+          <Text style={styles.label}>Design Results</Text>
+          <Text style={styles.value}>{item.dropTime || "Not recorded"}</Text>
+        </View>
+
+        <View style={styles.row}>
+          <Text style={styles.label}>Highest Bend</Text>
+          <Text style={styles.rowValue}>
+            {item.stopTime || "Not calculated"}
+          </Text>
+        </View>
+
+        <View style={styles.highlightBox}>
+          <Text style={styles.highlightLabel}>Estimated Force</Text>
+          <Text style={styles.highlightValue}>
+            {item.finalVelocity || "Not calculated"}
+          </Text>
+        </View>
+
+        <View style={styles.infoBlock}>
+          <Text style={styles.label}>Formula Method</Text>
+          <Text style={styles.value}>
+            {item.acceleration || "Not recorded"}
+          </Text>
+        </View>
+
+        <View style={styles.infoBlock}>
+          <Text style={styles.label}>Reflection</Text>
+          <Text style={styles.value}>
+            {item.reflection || "No reflection added"}
+          </Text>
+        </View>
+      </>
+    );
+  };
+
   const renderEarthquakeResult = (item: ActivityResult) => {
     return (
       <>
@@ -350,6 +399,10 @@ export default function HistoryScreen() {
   const renderResultDetails = (item: ActivityResult) => {
     if (item.activityId === "sound") {
       return renderSoundResult(item);
+    }
+
+    if (item.activityId === "hand-fan") {
+      return renderHandFanResult(item);
     }
 
     if (item.activityId === "earthquake") {

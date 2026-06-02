@@ -53,6 +53,30 @@ export const stemmActivities: STEMMActivity[] = [
       "Manual dB recording, location notes, loud/quiet zone mapping, hearing risk summary, and results history.",
   },
   {
+    id: "hand-fan",
+    title: "Hand Fan Challenge",
+    area: "Physics - Air Movement",
+    screenName: "HandFan",
+    overview:
+      "Test how moving air affects flexible materials by comparing bend angles for different fan designs, materials, and distances.",
+    equipment: [
+      "Paper and cardboard",
+      "Scissors",
+      "Mobile phone",
+      "Sticky tape",
+      "STEMM Mobile App",
+    ],
+    instructions: [
+      "Stand paper upright on a table.",
+      "Fan air from different distances such as 15 cm, 30 cm, and 45 cm.",
+      "Observe and record the bend angle in degrees.",
+      "Repeat with different fan designs.",
+      "Compare paper and cardboard results.",
+    ],
+    sensorUse:
+      "Manual bend angle recording, material stiffness comparison, approximate force calculation using F ≈ k × θ, and results history.",
+  },
+  {
     id: "human-performance",
     title: "Human Performance Lab",
     area: "Medical Science + Biomechanics",

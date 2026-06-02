@@ -19,6 +19,7 @@ import TeamSetupScreen from "../screens/TeamSetupScreen";
 
 import BreathingTrainerScreen from "../screens/activities/BreathingTrainerScreen";
 import EarthquakeStructureScreen from "../screens/activities/EarthquakeStructureScreen";
+import HandFanScreen from "../screens/activities/HandFanScreen";
 import HumanPerformanceScreen from "../screens/activities/HumanPerformanceScreen";
 import ParachuteDropScreen from "../screens/activities/ParachuteDropScreen";
 import ReactionBoardScreen from "../screens/activities/ReactionBoardScreen";
@@ -64,21 +65,7 @@ const challengesBackOptions = (navigation: any, title: string) => ({
 
 export default function AppNavigator() {
   return (
-    <Stack.Navigator initialRouteName="Login">
-      <Stack.Screen
-        name="Login"
-        component={LoginScreen}
-        options={{
-          headerShown: false,
-        }}
-      />
-
-      <Stack.Screen
-        name="Signup"
-        component={SignupScreen}
-        options={({ navigation }) => dashboardBackOptions(navigation, "Sign Up")}
-      />
-
+    <Stack.Navigator initialRouteName="TeamSetup">
       <Stack.Screen
         name="TeamSetup"
         component={TeamSetupScreen}
@@ -128,6 +115,14 @@ export default function AppNavigator() {
       />
 
       <Stack.Screen
+        name="HandFan"
+        component={HandFanScreen}
+        options={({ navigation }) =>
+          challengesBackOptions(navigation, "Hand Fan")
+        }
+      />
+
+      <Stack.Screen
         name="EarthquakeStructure"
         component={EarthquakeStructureScreen}
         options={({ navigation }) =>
@@ -156,6 +151,20 @@ export default function AppNavigator() {
         component={BreathingTrainerScreen}
         options={({ navigation }) =>
           challengesBackOptions(navigation, "Breathing Trainer")
+        }
+      />
+
+      <Stack.Screen
+        name="Login"
+        component={LoginScreen}
+        options={({ navigation }) => dashboardBackOptions(navigation, "Login")}
+      />
+
+      <Stack.Screen
+        name="Signup"
+        component={SignupScreen}
+        options={({ navigation }) =>
+          dashboardBackOptions(navigation, "Sign Up")
         }
       />
 

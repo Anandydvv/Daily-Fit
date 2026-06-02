@@ -1,143 +1,177 @@
-# Daily Fit 🏋️
+# STEMM Lab 🚀
 
-Daily Fit is a mobile fitness and wellness tracking application developed using React Native and Expo for the CSE3MAD Mobile Application Development assessment.
+STEMM Lab is an interactive educational mobile application developed using React Native, Expo, TypeScript, and Firebase. The application combines real-world STEMM (Science, Technology, Engineering, Mathematics, and Medical Science) learning activities with smartphone technologies such as GPS, accelerometer sensors, gyroscope sensors, notifications, and activity tracking.
 
-The application helps users:
-- Track workouts
-- Monitor fitness activities
-- View location-based activity tracking
-- Receive workout reminders
-- Store fitness data locally and in the cloud
+The project was developed as a university mobile application capstone project to demonstrate modern mobile development concepts including authentication systems, sensor integration, maps, notifications, and educational challenge-based learning.
 
 ---
 
-# Features
+# 📱 Features
 
-## Authentication
-- User Registration
-- User Login
-- Secure Firebase Authentication
+## 🔐 Firebase Authentication
 
-## Database
-- Firebase Firestore cloud storage
-- SQLite local offline storage
+* Secure user login and registration
+* Firebase email/password authentication
+* User profile integration
 
-## Mobile Features
-- GPS and Maps integration
-- Accelerometer and Gyroscope support
-- Battery monitoring
-- Notifications and reminders
-- Background task processing
+## 🧪 STEMM Challenges
 
-## Additional Features
-- AdMob integration
-- Dark/Light theme
-- Responsive UI design
+Interactive educational activities including:
+
+* Parachute Drop Challenge
+* Sound Pollution Hunter
+* Human Performance Lab
+* Reaction Board Challenge
+* Breathing Pace Trainer
+* Earthquake-Resistant Structure
+
+## 📍 GPS Walk Tracker
+
+* Live GPS map integration
+* Distance tracking
+* Step tracking
+* Latitude and longitude monitoring
+
+## 📱 Motion Sensors
+
+### Accelerometer
+
+* Real-time X, Y, Z movement tracking
+
+### Gyroscope
+
+* Real-time rotational movement tracking
+
+## 🔋 Battery Monitoring
+
+* Displays live device battery percentage
+* Resource monitoring during activities
+
+## 🔔 Notifications
+
+* STEMM activity reminders
+* Push notification support
+
+## 📊 Activity Results & History
+
+* Experiment result tracking
+* Activity history storage
+* Scientific calculations and measurements
+
+## 👤 Team Profile
+
+* User account management
+* Learning role display
+* Firebase-linked profile system
 
 ---
 
-# Technologies Used
+# 🛠️ Technologies Used
 
-- React Native
-- Expo
-- TypeScript
-- Firebase
-- Firestore
-- SQLite
-- Expo Notifications
-- Expo Location
-- Expo Sensors
+* React Native
+* Expo
+* TypeScript
+* Firebase Authentication
+* Firebase Database
+* React Navigation
+* Expo Location
+* Expo Sensors
+* Expo Notifications
+* React Native Maps
 
 ---
 
-# Project Structure
+# 📂 Project Structure
 
-```bash
+```bash id="rkkdfe"
 src/
- ├── assets/
- ├── components/
- ├── database/
- ├── firebase/
- ├── hooks/
- ├── navigation/
  ├── screens/
+ ├── navigation/
+ ├── activities/
+ ├── components/
  ├── services/
- └── utils/
+ ├── assets/
+ └── firebase/
 ```
 
 ---
 
-# Installation
+# ⚙️ Installation
 
 ## 1. Clone Repository
 
-```bash
-git clone YOUR_GITHUB_REPOSITORY_LINK
+```bash id="jlwmqa"
+git clone <repository-url>
 ```
-
----
 
 ## 2. Install Dependencies
 
-```bash
+```bash id="j7vg4k"
 npm install
 ```
 
----
+## 3. Start Application
 
-## 3. Start Development Server
-
-```bash
+```bash id="5k4p8r"
 npx expo start
 ```
 
 ---
 
-# Firebase Setup
+# 📱 Running the Application
 
-Create a Firebase project and enable:
-
-- Firebase Authentication
-- Firestore Database
-
-Add Firebase configuration inside:
-
-```bash
-src/firebase/firebaseConfig.ts
-```
+1. Install Expo Go on your mobile device
+2. Start the project using Expo
+3. Scan the QR code
+4. Open the app on your device
 
 ---
 
-# Sprint Structure
+# 🔐 Firebase Setup
 
-## Sprint 1
-Foundation and Database Systems
+The application uses Firebase Authentication for secure user login and registration.
 
-## Sprint 2
-Mobile Features and Device Integration
+Firebase services include:
 
-## Sprint 3
-Testing, Deployment and Finalization
-
----
-
-# Testing
-
-The application includes:
-- Unit Testing
-- Integration Testing
-- End-to-End Testing
-- Firebase Test Lab testing
+* Authentication
+* User account management
+* Cloud-based integration
 
 ---
 
-# Team Members
+# 🎯 Educational Purpose
 
-- Anand Yadav
-- Navteg Singh Bains
+STEMM Lab was designed to help students:
+
+* Learn through practical experimentation
+* Understand mobile technologies
+* Explore sensor-based learning
+* Participate in real-world STEMM activities
+* Analyse experiment results interactively
 
 ---
 
-# License
+# 👨‍💻 Developers
 
-This project is developed for educational purposes as part of the CSE3MAD assessment.
+* Navteg Singh Bains (22103967)
+* Anand Yadav (21629311)
+
+---
+
+# 📌 Project Status
+
+✅ Firebase Authentication
+✅ GPS Integration
+✅ Motion Sensors
+✅ Gyroscope Tracking
+✅ Notifications
+✅ Battery Monitoring
+✅ STEMM Challenges
+✅ Activity Results System
+✅ User Profile System
+
+---
+
+# 📖 License
+
+This project was developed for educational and academic purposes.

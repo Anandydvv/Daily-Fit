@@ -65,7 +65,23 @@ const challengesBackOptions = (navigation: any, title: string) => ({
 
 export default function AppNavigator() {
   return (
-    <Stack.Navigator initialRouteName="TeamSetup">
+    <Stack.Navigator initialRouteName="Login">
+      <Stack.Screen
+        name="Login"
+        component={LoginScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+
+      <Stack.Screen
+        name="Signup"
+        component={SignupScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+
       <Stack.Screen
         name="TeamSetup"
         component={TeamSetupScreen}
@@ -151,20 +167,6 @@ export default function AppNavigator() {
         component={BreathingTrainerScreen}
         options={({ navigation }) =>
           challengesBackOptions(navigation, "Breathing Trainer")
-        }
-      />
-
-      <Stack.Screen
-        name="Login"
-        component={LoginScreen}
-        options={({ navigation }) => dashboardBackOptions(navigation, "Login")}
-      />
-
-      <Stack.Screen
-        name="Signup"
-        component={SignupScreen}
-        options={({ navigation }) =>
-          dashboardBackOptions(navigation, "Sign Up")
         }
       />
 

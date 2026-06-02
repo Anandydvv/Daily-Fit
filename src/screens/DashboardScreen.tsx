@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+
 import { stemmActivities } from "../data/stemmActivities";
 
 export default function DashboardScreen() {
@@ -115,6 +116,7 @@ export default function DashboardScreen() {
         </View>
 
         <Text style={styles.heroTitle}>Welcome to your STEMM mission</Text>
+
         <Text style={styles.heroText}>
           Complete real-world science challenges using sensors, GPS, timers and
           saved results.
@@ -127,7 +129,9 @@ export default function DashboardScreen() {
           </View>
 
           <View style={styles.heroStat}>
-            <Text style={styles.heroStatValue}>{isAvailable ? "ON" : "OFF"}</Text>
+            <Text style={styles.heroStatValue}>
+              {isAvailable ? "ON" : "OFF"}
+            </Text>
             <Text style={styles.heroStatLabel}>Motion Sensor</Text>
           </View>
         </View>
@@ -143,13 +147,19 @@ export default function DashboardScreen() {
 
         <View style={styles.folderTextBox}>
           <Text style={styles.folderTitle}>STEMM Challenges</Text>
+
           <Text style={styles.folderSubtitle}>
             Open folder to view all activities
           </Text>
 
           <View style={styles.badgeRow}>
-            <Text style={styles.readyBadge}>{workingActivities} Ready</Text>
-            <Text style={styles.readMoreBadge}>Open Folder →</Text>
+            <Text style={styles.readyBadge}>
+              {workingActivities} Ready
+            </Text>
+
+            <Text style={styles.readMoreBadge}>
+              Open Folder →
+            </Text>
           </View>
         </View>
       </TouchableOpacity>
@@ -224,9 +234,26 @@ export default function DashboardScreen() {
 
       <View style={styles.stepsCard}>
         <Text style={styles.stepsTitle}>Live Movement Data</Text>
+
         <Text style={styles.stepsNumber}>{steps}</Text>
+
         <Text style={styles.stepsText}>
           steps detected while exploring STEMM activities
+        </Text>
+      </View>
+
+      <View style={styles.customAdBanner}>
+        <Text style={styles.customAdLabel}>
+          Sponsored STEMM Tip
+        </Text>
+
+        <Text style={styles.customAdTitle}>
+          🚀 Try the Parachute Drop Challenge
+        </Text>
+
+        <Text style={styles.customAdText}>
+          Test gravity, air resistance, and design thinking using simple
+          materials.
         </Text>
       </View>
     </ScrollView>
@@ -517,5 +544,36 @@ const styles = StyleSheet.create({
     color: "#64748B",
     textAlign: "center",
     marginTop: 4,
+  },
+
+  customAdBanner: {
+    backgroundColor: "#0F172A",
+    borderRadius: 22,
+    padding: 18,
+    marginTop: 20,
+    marginBottom: 30,
+    borderWidth: 1,
+    borderColor: "#38BDF8",
+  },
+
+  customAdLabel: {
+    color: "#93C5FD",
+    fontSize: 12,
+    fontWeight: "700",
+    marginBottom: 6,
+    textTransform: "uppercase",
+  },
+
+  customAdTitle: {
+    color: "#FFFFFF",
+    fontSize: 18,
+    fontWeight: "bold",
+    marginBottom: 6,
+  },
+
+  customAdText: {
+    color: "#CBD5E1",
+    fontSize: 14,
+    lineHeight: 20,
   },
 });

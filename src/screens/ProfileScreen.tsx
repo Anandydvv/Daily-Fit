@@ -23,7 +23,9 @@ export default function ProfileScreen() {
 
         <Text style={styles.name}>{user?.displayName || "STEMM Lab User"}</Text>
 
-        <Text style={styles.email}>{user?.email || "No email found"}</Text>
+        <Text style={styles.email}>
+  {auth.currentUser?.email || "student@stemmlab.com"}
+</Text>
 
         <View style={styles.infoBox}>
           <Text style={styles.infoTitle}>Account Status</Text>

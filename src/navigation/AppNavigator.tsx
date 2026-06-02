@@ -64,7 +64,21 @@ const challengesBackOptions = (navigation: any, title: string) => ({
 
 export default function AppNavigator() {
   return (
-    <Stack.Navigator initialRouteName="TeamSetup">
+    <Stack.Navigator initialRouteName="Login">
+      <Stack.Screen
+        name="Login"
+        component={LoginScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+
+      <Stack.Screen
+        name="Signup"
+        component={SignupScreen}
+        options={({ navigation }) => dashboardBackOptions(navigation, "Sign Up")}
+      />
+
       <Stack.Screen
         name="TeamSetup"
         component={TeamSetupScreen}
@@ -148,7 +162,9 @@ export default function AppNavigator() {
       <Stack.Screen
         name="Login"
         component={LoginScreen}
-        options={({ navigation }) => dashboardBackOptions(navigation, "Login")}
+        options={({ navigation }) =>
+          dashboardBackOptions(navigation, "Login")
+        }
       />
 
       <Stack.Screen

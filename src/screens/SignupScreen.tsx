@@ -1,8 +1,7 @@
 import { useNavigation } from "@react-navigation/native";
-import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import { createUserWithEmailAndPassword } from "firebase/auth";
 import { useState } from "react";
 import {
-  ActivityIndicator,
   Alert,
   KeyboardAvoidingView,
   Platform,
@@ -13,117 +12,72 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-
 import { auth } from "../firebaseConfig";
 
 export default function SignupScreen() {
   const navigation = useNavigation<any>();
 
-  const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
 
   const signupUser = async () => {
-    if (!fullName || !email || !password) {
-      Alert.alert("Missing Details", "Please fill all fields.");
-      return;
-    }
-
-    if (password.length < 6) {
-      Alert.alert("Weak Password", "Password must be at least 6 characters.");
+    if (!email || !password) {
+      Alert.alert("Missing Details", "Please enter email and password.");
       return;
     }
 
     try {
-      setLoading(true);
-
-      const userCredential = await createUserWithEmailAndPassword(
-        auth,
-        email.trim(),
-        password,
-      );
-
-      await updateProfile(userCredential.user, {
-        displayName: fullName.trim(),
-      });
-
-      Alert.alert(
-        "Account Created",
-        "Your account has been created successfully.",
-      );
-
-      navigation.replace("Dashboard");
+      await createUserWithEmailAndPassword(auth, email.trim(), password);
+      Alert.alert("Account Created", "Your STEMM Lab account has been created.");
+      navigation.replace("Login");
     } catch (error: any) {
       Alert.alert("Signup Failed", error.message);
-    } finally {
-      setLoading(false);
     }
   };
 
   return (
     <KeyboardAvoidingView
-      style={styles.keyboardView}
+      style={styles.container}
       behavior={Platform.OS === "ios" ? "padding" : undefined}
     >
-      <ScrollView
-        contentContainerStyle={styles.container}
-        keyboardShouldPersistTaps="handled"
-      >
-        <View style={styles.logoBox}>
-          <Text style={styles.logoText}>DailyFit</Text>
-        </View>
+      <ScrollView contentContainerStyle={styles.scrollContent}>
+        <Text style={styles.logo}>🧪</Text>
 
-        <Text style={styles.tagline}>Create your fitness account</Text>
+        <Text style={styles.title}>STEMM Lab</Text>
 
-        <View style={styles.signupCard}>
-          <Text style={styles.cardTitle}>Start your</Text>
-          <Text style={styles.cardTitleGreen}>health journey ♡</Text>
+        <Text style={styles.subtitle}>
+          Start your STEMM learning journey today.
+        </Text>
 
-          <TextInput
-            placeholder="Full Name"
-            placeholderTextColor="#9E9E9E"
-            style={styles.input}
-            value={fullName}
-            onChangeText={setFullName}
-          />
+        <View style={styles.card}>
+          <Text style={styles.cardTitle}>Create your</Text>
+          <Text style={styles.cardTitleGreen}>STEMM Lab account 🚀</Text>
 
           <TextInput
             placeholder="Email"
-            placeholderTextColor="#9E9E9E"
-            keyboardType="email-address"
-            autoCapitalize="none"
-            style={styles.input}
+            placeholderTextColor="#888"
             value={email}
             onChangeText={setEmail}
+            style={styles.input}
+            keyboardType="email-address"
+            autoCapitalize="none"
           />
 
           <TextInput
             placeholder="Password"
-            placeholderTextColor="#9E9E9E"
-            secureTextEntry
-            style={styles.input}
+            placeholderTextColor="#888"
             value={password}
             onChangeText={setPassword}
+            style={styles.input}
+            secureTextEntry
           />
 
-          <TouchableOpacity
-            style={styles.button}
-            onPress={signupUser}
-            disabled={loading}
-          >
-            {loading ? (
-              <ActivityIndicator color="#fff" />
-            ) : (
-              <Text style={styles.buttonText}>Sign Up</Text>
-            )}
+          <TouchableOpacity style={styles.signupButton} onPress={signupUser}>
+            <Text style={styles.signupButtonText}>Register</Text>
           </TouchableOpacity>
 
           <TouchableOpacity onPress={() => navigation.navigate("Login")}>
-            <Text style={styles.loginText}>
-              Already have an account?{" "}
-              <Text style={styles.loginGreen}>Login</Text>
-            </Text>
+            <Text style={styles.loginText}>Already have an account? Login</Text>
           </TouchableOpacity>
         </View>
       </ScrollView>
@@ -132,104 +86,91 @@ export default function SignupScreen() {
 }
 
 const styles = StyleSheet.create({
-  keyboardView: {
+  container: {
     flex: 1,
     backgroundColor: "#EEF8EC",
   },
 
-  container: {
+  scrollContent: {
     flexGrow: 1,
-    backgroundColor: "#EEF8EC",
-    padding: 18,
-    paddingBottom: 60,
-    alignItems: "center",
     justifyContent: "center",
+    padding: 24,
   },
 
-  logoBox: {
-    width: "92%",
-    paddingVertical: 16,
-    borderRadius: 24,
-    borderWidth: 1.5,
-    borderColor: "#7EA66A",
-    backgroundColor: "rgba(255,255,255,0.6)",
-    alignItems: "center",
-    marginBottom: 12,
-  },
-
-  logoText: {
-    fontSize: 42,
-    fontWeight: "bold",
-    color: "#416D32",
-  },
-
-  tagline: {
-    fontSize: 16,
-    color: "#3F3F3F",
-    fontWeight: "600",
+  logo: {
+    fontSize: 64,
     textAlign: "center",
-    marginBottom: 24,
+    marginBottom: 8,
   },
 
-  signupCard: {
-    width: "100%",
-    backgroundColor: "#FFFFFF",
-    borderRadius: 30,
-    padding: 20,
+  title: {
+    fontSize: 38,
+    fontWeight: "bold",
+    textAlign: "center",
+    color: "#2E7D32",
+  },
+
+  subtitle: {
+    fontSize: 16,
+    textAlign: "center",
+    color: "#555",
+    marginTop: 8,
+    marginBottom: 28,
+  },
+
+  card: {
+    backgroundColor: "#fff",
+    borderRadius: 26,
+    padding: 22,
     shadowColor: "#000",
     shadowOpacity: 0.12,
-    shadowRadius: 18,
+    shadowRadius: 16,
     elevation: 7,
   },
 
   cardTitle: {
     fontSize: 24,
     fontWeight: "bold",
-    textAlign: "center",
     color: "#2A2A2A",
+    textAlign: "center",
   },
 
   cardTitleGreen: {
-    fontSize: 24,
+    fontSize: 26,
     fontWeight: "bold",
+    color: "#2E7D32",
     textAlign: "center",
-    color: "#5C8F45",
-    marginBottom: 18,
+    marginBottom: 22,
   },
 
   input: {
-    backgroundColor: "#FBFCFA",
-    borderWidth: 1,
-    borderColor: "#DDE8D8",
-    borderRadius: 16,
+    backgroundColor: "#F5F7FA",
+    borderRadius: 14,
     padding: 15,
-    marginBottom: 12,
     fontSize: 16,
+    marginBottom: 13,
+    color: "#111",
   },
 
-  button: {
+  signupButton: {
     backgroundColor: "#4F7D3A",
     padding: 16,
-    borderRadius: 16,
-    marginTop: 4,
+    borderRadius: 14,
+    marginTop: 8,
   },
 
-  buttonText: {
-    color: "#FFFFFF",
+  signupButtonText: {
+    color: "#fff",
     textAlign: "center",
     fontSize: 18,
     fontWeight: "bold",
   },
 
   loginText: {
+    marginTop: 18,
     textAlign: "center",
+    color: "#2E7D32",
     fontSize: 15,
-    color: "#333",
-    marginTop: 16,
-  },
-
-  loginGreen: {
-    color: "#4F7D3A",
-    fontWeight: "bold",
+    fontWeight: "600",
   },
 });

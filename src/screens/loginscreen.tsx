@@ -31,7 +31,7 @@ export default function LoginScreen() {
 
     try {
       await signInWithEmailAndPassword(auth, email.trim(), password);
-      navigation.replace("Home");
+     navigation.replace("Dashboard");
     } catch (error: any) {
       Alert.alert("Login Failed", error.message);
     }
